@@ -64,23 +64,14 @@ const stone = {
     ],
     wealth: 432,
 
-    resources: {
-        augmentSize: {currentUses: 4, maxUses: 4},
-        runicShield: {currentUses: 4, maxUses: 4},
-        hillRune: {currentUses: 1, maxUses: 1},
-        stoneRune: {currentUses: 1, maxUses: 1},
-        fireRune: {currentUses: 1, maxUses: 1},
-        stormRune: {currentUses: 1, maxUses: 1},
-        actionSurge: {currentUses: 1, maxUses: 1},
-        secondWind: {currentUses: 1, maxUses: 1},
-        indomitable: {currentUses: 1, maxUses: 1},
-        scorchingRay: {currentUses: 8, maxUses: 10}
+    get actions() {
+
     },
 
     get armorClass() {
         let ac = 0;
         this.armor.forEach(armor => {
-            ac += armor.armorClass;
+            ac += armor.armorClass + armor.enchantment;
             if (armor.type === 'Light') {
                 ac += this.abilityScoreMods['DEX'];
             } else if (armor.type === 'Medium') {
@@ -88,6 +79,8 @@ const stone = {
             }
         });
         if (!ac) ac = 10 + this.abilityScoreMods['DEX'];
+        ac += 1; // Cloak of Protection
+        ac += 1; // Constructed Resilience
         return ac;
     },
 
@@ -130,7 +123,14 @@ const stone = {
             } else if (this.proficiencies.skills.includes(skill.name)) {
                 mod += this.proficiencyBonus;
             }
-            skills[skill.fullName] = mod;
+
+            skills[skill.name] = {
+                name: skill.name, 
+                ability: skill.ability,
+                fullName: skill.fullName,
+                mod: mod, 
+                roll: `d20${mod >= 0 ? '+' : '-'}${mod}`
+            };
         }
         return skills;
     }
