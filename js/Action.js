@@ -1,9 +1,11 @@
 class Action {
-    constructor(name, type, rolls, description) {
+    constructor(name, type, rolls, description, remainingUses = null, totalUses = null) {
         this.name = name;
         this.type = type;
         this.rolls = rolls;
         this.description = description;
+        this.remainingUses = remainingUses;
+        this.totalUses = totalUses;
     }
 
     static getActionLookUp(character)  {
@@ -34,6 +36,7 @@ class Action {
                 'Give ally advantage on an ability check or attack until start of your next turn.'),
             new Action('Ready', 'Action', null,
                 'Hold an action until a specific circumstance occurs, then use your reaction to do the action.'),
+            new Action('Drink potion', 'Action', null, null),
             
             // Reactions:
             new Action('Opportunity Attack', 'Reaction', null,

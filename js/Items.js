@@ -17,14 +17,13 @@ class Armor extends Item {
 }
 
 class Weapon extends Item {
-    constructor(name, weaponType, properties, range, damage, savingThrow = null, 
+    constructor(name, weaponType, properties, range, damage, 
         enchantment = 0, description = "", requiresAttunement = false) {
         super(name, description, requiresAttunement);
         this.type = weaponType;
         this.properties = properties;
         this.range = range;
-        this.damageType = damage;
-        this.savingThrow = savingThrow;
+        this.damage = damage;
         this.enchantment = enchantment;
     }
 }
