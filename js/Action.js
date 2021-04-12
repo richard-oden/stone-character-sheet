@@ -1,9 +1,10 @@
 class Action {
-    constructor(name, type, rolls, description, remainingUses = null, totalUses = null) {
+    constructor(name, type, rolls, description, range = null, remainingUses = null, totalUses = null) {
         this.name = name;
         this.type = type;
         this.rolls = rolls;
         this.description = description;
+        this.range = range;
         this.remainingUses = remainingUses;
         this.totalUses = totalUses;
     }
