@@ -11,6 +11,7 @@ const stone = {
     remainingHitDice: 11,
     speed: 30,
     vision: "Dark Vision: 120ft",
+    inspiration: false,
 
     abilityScores: {
         STR: 18,

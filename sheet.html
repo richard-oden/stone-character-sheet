@@ -12,16 +12,44 @@
 </head>
 <body>
     <header>
-
+        <h1 class="char-name"></h1> 
+        <p class="basic-info"></p> 
     </header>
-    <body>
-
+    <body class="grid">
+        <section class="row top-row">
+            <div class="abil-scores"></div>
+        </section>
+        <section class="col left-col">
+            <div class="row basic-stats"></div>
+            <div class="col skills"></div>
+        </section>
+        <section class="col center-col">
+            <div class="hp grid"></div>
+            <div class="inventory">
+                <h2>Inventory</h2>
+                <div class="wealth"></div>
+                <form class="inventory-filter"></form>
+                <div class="items"></div>
+            </div>
+        </section>
+        <section class="col right-col">
+            <div class="col situational-info"></div>
+            <div class="col proficiencies"></div>
+        </section>
+        <section class="cards bottom-row">
+            <h2>Actions</h2>
+            <form class="actions-filter"></form>
+            <div class="actions"></div>
+        </section>
     </body>
     <footer>
-        <script src="js/Skill.js"></script>
-        <script src="js/Items.js"></script>
-        <script src="js/Action.js"></script>
-        <script src="js/Stone.js"></script>
+        <a href="#">Cheat sheet</a>
+        <a href="#">5e Tools</a>
+        <span>Created by <a href="https://github.com/richard-oden/stone-character-sheet">Richard Oden</a></span>
     </footer>
+    <script src="js/Skill.js"></script>
+    <script src="js/Items.js"></script>
+    <script src="js/Action.js"></script>
+    <script src="js/Stone.js"></script>
 </body>
 </html>
