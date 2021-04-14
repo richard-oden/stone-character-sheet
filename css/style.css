@@ -1,4 +1,76 @@
 * {
     box-sizing: border-box;
     font-family: 'Merriweather', serif;
+    background-color: #1c1e26;
+    color: blanchedalmond;
+    border-color: blanchedalmond;
+    --highlight-background: rgb(34, 35, 46);
+    --highlight-foreground: white;
+    --important: rgb(133, 0, 0);
+}
+
+/* HELPER CLASSES =============================== */
+
+.col, .row {
+    display: flex;
+}
+
+.col {
+    flex-direction: column;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.cards {
+    flex-wrap: wrap;
+}
+
+.grid {
+    display: grid;
+}
+
+/* LAYOUT =============================== */
+
+body {
+    height: 100vh;
+}
+
+main {
+    grid-template-areas: 
+        "top-row top-row top-row"
+        "left-col center-col right-col"
+        "bottom-row bottom-row bottom-row";
+}
+
+.top-row {
+    grid-area: top-row;
+}
+
+.bottom-row {
+    grid-area: bottom-row;
+}
+
+.left-col {
+    grid-area: left-col;
+}
+
+.center-col {
+    grid-area: center-col;
+}
+
+.right-col {
+    grid-area: right-col;
+}
+
+/* STYLING =============================== */
+
+header, footer, section {
+    padding: .5rem;
+    margin: .5rem;
+}
+
+section {
+    border: 1px solid;
 }
