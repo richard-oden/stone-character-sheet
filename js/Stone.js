@@ -7,6 +7,7 @@ const stone = {
 
     currentHitPoints: 127,
     maxHitPoints: 127,
+    tempHitPoints: 0,
     hitDie: 'd10',
     remainingHitDice: 11,
     speed: 30,
@@ -126,7 +127,7 @@ If you die while wearing the ring, your soul enters it, unless it already houses
     },
 
     get initiative() {
-        this.abilityScoreMods.DEX;
+        return this.abilityScoreMods.DEX;
     },
 
     get savingThrows() {
@@ -155,7 +156,7 @@ If you die while wearing the ring, your soul enters it, unless it already houses
                 ability: skill.ability,
                 fullName: skill.fullName,
                 mod: mod, 
-                roll: `d20${mod >= 0 ? '+' : '-'}${mod}`
+                roll: `d20${mod >= 0 ? '+' : ''}${mod}`
             };
         }
         return skills;
@@ -174,7 +175,7 @@ If you die while wearing the ring, your soul enters it, unless it already houses
             let rollsString = `Attack: d20+${attackMod} / Damage: `;
             for (const damageType of Object.keys(weapon.damage)) {
                 rollsString += weapon.damage[damageType];
-                if (Object.keys(weapon.damage)[0] == damageType) rollsString += (mod >= 0 ? '+' : '-') + damageMod;
+                if (Object.keys(weapon.damage)[0] == damageType) rollsString += (mod >= 0 ? '+' : '') + damageMod;
                 rollsString += ` ${damageType} `;
             }
 
