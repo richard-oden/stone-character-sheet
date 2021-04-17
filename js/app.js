@@ -162,6 +162,54 @@ situationalInfoHTML +=
 situationalInfoHTML += '</div>'
 situationalInfo.innerHTML = situationalInfoHTML;
 
+const populateInventory = arr => {
+    let inventoryHTML = '';
+    for (const item of arr) {
+        const attunementHTML = item.attunement ? 
+        `<span class="attuned row">
+            <small>Attuned:&nbsp</small>
+            <input class="small" type="checkbox" ${stone.attunedItemNames.includes(item.name) ? ' checked' : ''}></input>
+        </span>` : '';
+
+        inventoryHTML +=
+        `
+            <div class="item col bordered">
+                <div class="item-info border-bottom grid">
+                    <input type="checkbox" class="toggle-desc small"${item.description ? '' : ' disabled'}></input>
+                    <span>${item.name}</span>
+                    ${item.armorClass ? `<span class="small">AC: ${item.armorClass}</span>` : ''}
+                    ${item.damage ? `<span class="small">${item.getRollsString(stone)}</span>` : ''}
+                    ${item.range ? `<span class="small">${item.range}ft</span>` : ''}
+                    ${attunementHTML}
+                </div>
+                ${item.description ? `<div class="description small">${item.description}</div>` : ''}
+            </div>
+        `;
+    }
+    items.innerHTML = inventoryHTML;
+}
+
+const applyInventoryFilter = arr => {
+    const includeWeapons = document.querySelector('#toggle-weapons').checked;
+    const includeArmor = document.querySelector('#toggle-armor').checked;
+    const includeMisc = document.querySelector('#toggle-misc').checked;
+
+    let tempArr = [];
+    if (!includeWeapons && !includeArmor && !includeMisc) {
+        return arr;
+    }
+    if (includeWeapons) {
+        tempArr.push(...[arr.filter(i => i.constructor.name === 'Weapon')]);
+    }
+    if (includeArmor) { 
+        tempArr.push(...[arr.filter(i => i.constructor.name === 'Armor')]);
+    } 
+    if (includeMisc) {
+        tempArr.push(...[arr.filter(i => i.constructor.name === 'Item')]);
+    }
+    return tempArr;
+}
+
 const toggleBtns = document.querySelectorAll('.toggle-btn-input');
 for (const toggleBtn of toggleBtns) {
     toggleBtn.addEventListener('change', event => {
@@ -169,3 +217,5 @@ for (const toggleBtn of toggleBtns) {
         label.style.backgroundColor = event.target.checked ? 'var(--active-background)' : 'var(--highlight-background)';
     });
 }
+
+populateInventory(applyInventoryFilter(stone.inventory));

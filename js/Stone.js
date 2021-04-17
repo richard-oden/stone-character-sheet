@@ -41,9 +41,10 @@ const stone = {
         new Weapon('Kanabo (Maul +1)', 'Martial', ['Heavy', 'Two-Handed'], 
             range = '5', {bludgeoning: "2d6"}, enchantment = 1),
         new Weapon('Javelin of Lightning', 'Simple', ['Range', 'Thrown'],
-            range = '30/120', {piercing: '1d6', lightning: '4d6'}, enchantment = 0, savingThrow = 13,
+            range = '30/120', {piercing: '1d6', lightning: '4d6'}, enchantment = 0,
             description = `This Javelin is a Magic Weapon. When you hurl it and speak its Command Word, it transforms into a bolt of lightning, forming a line 5 feet wide that extends out from you to a target within 120 feet. Each creature in the line excluding you and the target must make a DC 13 Dexterity saving throw, taking 4d6 lightning damage on a failed save, and half as much damage on a successful one. The Lightning Bolt turns back into a Javelin when it reaches the target. Make a ranged weapon Attack against the target. On a hit, the target takes damage from the Javelin plus 4d6 lightning damage.
-            The javelin's property can't be used again until the next dawn. In the meantime, the Javelin can still be used as a Magic Weapon.`),
+The javelin's property can't be used again until the next dawn. In the meantime, the Javelin can still be used as a Magic Weapon.`,
+            requiresAttunement = false),
         ],
     armor: [
         new Armor('Plate Armor', 'Heavy', 18)
@@ -93,6 +94,12 @@ If you die while wearing the ring, your soul enters it, unless it already houses
         successes: 0,
         failures: 0
     },
+
+    attunedItemNames: [
+        'Enchantment of Protection (Cloak of Protection)',
+        'Auto Stabilizer (Periapt of Wound Closure)',
+        'Ring of Mind Shielding'
+    ],
 
     get inventory() {
         return [...this.weapons, ...this.armor, ...this.items];
@@ -171,20 +178,8 @@ If you die while wearing the ring, your soul enters it, unless it already houses
         const basicActions = Action.getActionLookUp(this);
 
         const createActionFromWeapon = (weapon, extraAttackMod = 0, extraDamageMod = 0) => {
-            let mod = this.abilityScoreMods.STR;
-            if (weapon.enchantment) mod += weapon.enchantment;
-
-            let attackMod = mod + extraAttackMod + (this.proficiencies.weapons.includes(weapon.type) ? this.proficiencyBonus : 0);
-            let damageMod = mod + extraDamageMod;
-
-            let rollsString = `Attack: d20+${attackMod} / Damage: `;
-            for (const damageType of Object.keys(weapon.damage)) {
-                rollsString += weapon.damage[damageType];
-                if (Object.keys(weapon.damage)[0] == damageType) rollsString += (mod >= 0 ? '+' : '') + damageMod;
-                rollsString += ` ${damageType} `;
-            }
-
-            return new Action(`Attack with ${weapon.name}`, 'Action', rollsString, weapon.description, weapon.range);
+            return new Action(`Attack with ${weapon.name}`, 'Action', 
+                weapon.getRollsString(this, extraAttackMod, extraDamageMod), weapon.description, weapon.range);
         };
         
         const weaponAttackActions = this.weapons.map(weapon => createActionFromWeapon(weapon));

@@ -12,33 +12,32 @@
 </head>
 <body>
     <main class="grid">
-        <section class="col top-left">
+        <section class="col top-left bordered">
             <h1 class="char-name"></h1> 
             <p class="basic-info"></p> 
         </section>
         <section class="row top-row"></section>
-        <section class="col left-col">
-            <div class="col skills">
-                
-            </div>
-        </section>
+        <section class="col left-col bordered skills"></section>
         <section class="col center-col">
-            <div class="basic-stats row"></div>
-            <div class="inventory grid">
-                <form class="inventory-filter row bordered">
-                    <input class="filter-item" type="text" id="search-inventory">
-                    <input type="checkbox" class="toggle-btn-input" id="toggle-weapons">
-                    <label class="filter-item toggle-btn" for="toggle-weapons">Weapons</label>
-                    <input type="checkbox" class="toggle-btn-input" id="toggle-armor">
-                    <label class="filter-item toggle-btn" for="toggle-armor">Armor</label>
-                    <input type="checkbox" class="toggle-btn-input" id="toggle-misc">
-                    <label class="filter-item toggle-btn" for="toggle-misc">Misc.</label>
-                </form>
-                <div class="wealth col bordered stat-card"></div>
-                <div class="items col"></div>
+            <div class="col">
+                <div class="basic-stats row"></div>
+                <div class="inventory grid">
+                    <form class="inventory-filter row bordered">
+                        <input class="filter-item" type="text" id="search-inventory">
+                        <input type="checkbox" class="toggle-btn-input" id="toggle-weapons">
+                        <label class="filter-item toggle-btn" for="toggle-weapons">Weapons</label>
+                        <input type="checkbox" class="toggle-btn-input" id="toggle-armor">
+                        <label class="filter-item toggle-btn" for="toggle-armor">Armor</label>
+                        <input type="checkbox" class="toggle-btn-input" id="toggle-misc">
+                        <label class="filter-item toggle-btn" for="toggle-misc">Misc.</label>
+                    </form>
+                    <div class="wealth col bordered stat-card"></div>
+                </div>
             </div>
+            <div class="items col"></div>
         </section>
-        <section class="col right-col">
+        
+        <section class="col right-col bordered">
             <div class="col situational-info"></div>
         </section>
         <section class="row cards bottom-row">
