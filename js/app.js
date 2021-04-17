@@ -128,6 +128,12 @@ basicStats.innerHTML +=
     </div>
 `;
 
+wealth.innerHTML =
+`
+    <small>Wealth</small>
+    <div class="fig-m">${stone.wealth}</div>
+`;
+
 let situationalInfoHTML = '';
 situationalInfoHTML += 
 `<h3 class="advantage">Advantage</h3>
@@ -155,3 +161,11 @@ situationalInfoHTML +=
         }
 situationalInfoHTML += '</div>'
 situationalInfo.innerHTML = situationalInfoHTML;
+
+const toggleBtns = document.querySelectorAll('.toggle-btn-input');
+for (const toggleBtn of toggleBtns) {
+    toggleBtn.addEventListener('change', event => {
+        const label = document.querySelector(`label[for=${event.target.id}]`);
+        label.style.backgroundColor = event.target.checked ? 'var(--active-background)' : 'var(--highlight-background)';
+    });
+}

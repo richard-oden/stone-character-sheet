@@ -94,6 +94,10 @@ If you die while wearing the ring, your soul enters it, unless it already houses
         failures: 0
     },
 
+    get inventory() {
+        return [...this.weapons, ...this.armor, ...this.items];
+    },
+
     get maxHitDice() {return this.level},
 
     get armorClass() {

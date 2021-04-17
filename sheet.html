@@ -24,11 +24,18 @@
         </section>
         <section class="col center-col">
             <div class="basic-stats row"></div>
-            <div class="inventory">
-                <h3>Inventory</h3>
-                <div class="wealth"></div>
-                <form class="inventory-filter"></form>
-                <div class="items"></div>
+            <div class="inventory grid">
+                <form class="inventory-filter row bordered">
+                    <input class="filter-item" type="text" id="search-inventory">
+                    <input type="checkbox" class="toggle-btn-input" id="toggle-weapons">
+                    <label class="filter-item toggle-btn" for="toggle-weapons">Weapons</label>
+                    <input type="checkbox" class="toggle-btn-input" id="toggle-armor">
+                    <label class="filter-item toggle-btn" for="toggle-armor">Armor</label>
+                    <input type="checkbox" class="toggle-btn-input" id="toggle-misc">
+                    <label class="filter-item toggle-btn" for="toggle-misc">Misc.</label>
+                </form>
+                <div class="wealth col bordered stat-card"></div>
+                <div class="items col"></div>
             </div>
         </section>
         <section class="col right-col">
