@@ -11,6 +11,7 @@ const items = document.querySelector('.items');
 const situationalInfo = document.querySelector('.situational-info');
 const proficiencies = document.querySelector('.proficiencies');
 const actionsFilter = document.querySelector('.actions-filter');
+const resources = document.querySelector('.resources');
 const actions = document.querySelector('.actions');
 
 const getClasses = (queryItem, queryType = '', profArr = []) => {
@@ -75,7 +76,7 @@ skillsHTML = '';
 for (const skill in stone.skills) {
     skillsHTML +=
     `
-        <div class="grid skill border-bottom${getClasses(skill, '', stone.proficiencies.skills)}">
+        <div class="grid skill border-bottom ellipsis${getClasses(skill, '', stone.proficiencies.skills)}">
             <span class="skill-mod">${stone.skills[skill].mod}</span>
             <span>${stone.skills[skill].name}</span>
             <span>(${stone.skills[skill].ability})</span>
@@ -162,10 +163,24 @@ situationalInfoHTML +=
 situationalInfoHTML += '</div>'
 situationalInfo.innerHTML = situationalInfoHTML;
 
+resourcesHTML = '';
+const limitedActions = stone.actions
+    .filter(a => a.totalUses > 0)
+    .sort(compareObjectsByName);
+for (const action of limitedActions) {
+    resourcesHTML +=
+    `
+    <div class="col bordered stat-card">
+        <small class="ellipsis">${shortenResourceName(action.name)}</small>
+        <div class="fig-m">${action.remainingUses} / ${action.totalUses}</div>
+    </div>
+    `;
+}
+resources.innerHTML = resourcesHTML;
+
 const populateInventory = arr => {
     let inventoryHTML = '';
     for (const item of arr) {
-        console.log(item);
         const attunementHTML = item.attunement ? 
         `<span class="attuned row">
             <small>Attuned:&nbsp</small>

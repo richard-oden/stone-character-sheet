@@ -16,6 +16,7 @@
 
 .col, .row {
     display: flex;
+    flex-wrap: nowrap;
 }
 
 .col {
@@ -80,6 +81,13 @@
     border-bottom: 1px solid var(--foreground);
     padding-bottom: 1rem;
     margin-bottom: 1rem;
+}
+
+.ellipsis {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* LAYOUT =============================== */
@@ -204,7 +212,7 @@ input[type="checkbox"].small {
 }
 
 input[type="checkbox"]:disabled {
-    background-color: var(--foreground);
+    opacity: .5;
 }
 
 input:checked {
@@ -308,4 +316,15 @@ input[type="text"]:active, input[type="text"]:focus {
 
 .prof-category {
     grid-template-columns: 30% auto;
+}
+
+.bottom-row {
+    grid-template-areas:
+        "filter resources"
+        "actions actions";
+    gap: .5rem;
+}
+
+.resources .stat-card {
+    max-width: 90px;
 }

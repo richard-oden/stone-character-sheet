@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/rpg-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
     <title>Stone - Character Sheet</title>
 </head>
@@ -14,7 +15,7 @@
     <main class="grid">
         <section class="col top-left bordered">
             <h1 class="char-name"></h1> 
-            <p class="basic-info"></p> 
+            <p class="basic-info"></p>
         </section>
         <section class="row top-row"></section>
         <section class="col left-col bordered skills"></section>
@@ -40,9 +41,19 @@
         <section class="col right-col bordered">
             <div class="col situational-info"></div>
         </section>
-        <section class="row cards bottom-row">
-            <h3>Actions</h3>
-            <form class="actions-filter"></form>
+        <section class="grid bottom-row">
+            <form class="actions-filter row bordered">
+                <input class="filter-item" type="text" id="search-actions">
+                <input type="checkbox" class="toggle-btn-input" id="toggle-standard">
+                <label class="filter-item toggle-btn" for="toggle-standard">Standard</label>
+                <input type="checkbox" class="toggle-btn-input" id="toggle-move">
+                <label class="filter-item toggle-btn" for="toggle-move">Move</label>
+                <input type="checkbox" class="toggle-btn-input" id="toggle-bonus">
+                <label class="filter-item toggle-btn" for="toggle-bonus">Bonus</label>
+                <input type="checkbox" class="toggle-btn-input" id="toggle-reaction">
+                <label class="filter-item toggle-btn" for="toggle-reaction">Reaction</label>
+            </form>
+            <div class="resources row"></div>
             <div class="actions"></div>
         </section>
     </main>
