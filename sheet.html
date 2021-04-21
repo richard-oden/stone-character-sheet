@@ -23,13 +23,13 @@
             <div class="col">
                 <div class="basic-stats row"></div>
                 <div class="inventory grid">
-                    <form class="inventory-filter row bordered">
+                    <form class="filter inventory-filter row bordered">
                         <input class="filter-item" type="text" id="search-inventory">
-                        <input type="checkbox" class="toggle-btn-input" id="toggle-weapons">
+                        <input type="checkbox" class="toggle-btn-input" id="toggle-weapons" value="Weapon">
                         <label class="filter-item toggle-btn" for="toggle-weapons">Weapons</label>
-                        <input type="checkbox" class="toggle-btn-input" id="toggle-armor">
+                        <input type="checkbox" class="toggle-btn-input" id="toggle-armor" value="Armor">
                         <label class="filter-item toggle-btn" for="toggle-armor">Armor</label>
-                        <input type="checkbox" class="toggle-btn-input" id="toggle-misc">
+                        <input type="checkbox" class="toggle-btn-input" id="toggle-misc" value="Item">
                         <label class="filter-item toggle-btn" for="toggle-misc">Misc.</label>
                     </form>
                     <div class="wealth col bordered stat-card"></div>
@@ -42,19 +42,25 @@
             <div class="col situational-info"></div>
         </section>
         <section class="grid bottom-row">
-            <form class="actions-filter row bordered">
-                <input class="filter-item" type="text" id="search-actions">
-                <input type="checkbox" class="toggle-btn-input" id="toggle-standard">
-                <label class="filter-item toggle-btn" for="toggle-standard">Standard</label>
-                <input type="checkbox" class="toggle-btn-input" id="toggle-move">
-                <label class="filter-item toggle-btn" for="toggle-move">Move</label>
-                <input type="checkbox" class="toggle-btn-input" id="toggle-bonus">
-                <label class="filter-item toggle-btn" for="toggle-bonus">Bonus</label>
-                <input type="checkbox" class="toggle-btn-input" id="toggle-reaction">
-                <label class="filter-item toggle-btn" for="toggle-reaction">Reaction</label>
-            </form>
             <div class="resources row"></div>
-            <div class="actions"></div>
+            <form class="filter actions-filter row bordered">
+                <input class="filter-item" type="text" id="search-actions">
+                <input type="checkbox" class="toggle-btn-input" id="toggle-standard" value="Action">
+                <label class="filter-item toggle-btn" for="toggle-standard">Standard</label>
+                <input type="checkbox" class="toggle-btn-input" id="toggle-move" value="Move">
+                <label class="filter-item toggle-btn" for="toggle-move">Move</label>
+                <input type="checkbox" class="toggle-btn-input" id="toggle-bonus" value="Bonus">
+                <label class="filter-item toggle-btn" for="toggle-bonus">Bonus</label>
+                <input type="checkbox" class="toggle-btn-input" id="toggle-reaction" value="Reaction">
+                <label class="filter-item toggle-btn" for="toggle-reaction">Reaction</label>
+                <input type="checkbox" class="toggle-btn-input" id="toggle-free" value="Free">
+                <label class="filter-item toggle-btn" for="toggle-free">Free</label>
+            </form>
+            <form class="states"></form>
+            <div class="actions grid">
+                <div class="col actions-col-left"></div>
+                <div class="col actions-col-right"></div>
+            </div>
         </section>
     </main>
     <footer class="row">

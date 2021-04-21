@@ -178,6 +178,14 @@ for (const action of limitedActions) {
 }
 resources.innerHTML = resourcesHTML;
 
+const filterToggleBtns = document.querySelectorAll('.toggle-btn-input');
+for (const toggleBtn of filterToggleBtns) {
+    toggleBtn.addEventListener('change', event => {
+        const label = document.querySelector(`label[for=${event.target.id}]`);
+        label.style.backgroundColor = event.target.checked ? 'var(--active-background)' : 'var(--highlight-background)';
+    });
+}
+
 const populateInventory = arr => {
     let inventoryHTML = '';
     for (const item of arr) {
@@ -222,34 +230,65 @@ const populateInventory = arr => {
     }
 }
 
-const applyInventoryFilter = arr => {
-    const includeWeapons = document.querySelector('#toggle-weapons').checked;
-    const includeArmor = document.querySelector('#toggle-armor').checked;
-    const includeMisc = document.querySelector('#toggle-misc').checked;
+const populateActions = arr => {
+    let actionsColLeftHTML = '';
+    let actionsColRightHTML = '';
+    const getHTML = (action) => {
+        return `<div class="action col bordered">
+                    <div class="item-info grid">
+                        <span class="name">${action.name}</span>
+                        <span class="small">${action.type}</span>
+                        ${action.rolls ? `<span class="small">${action.rolls}</span>` : ''}
+                        ${action.range ? `<span class="small">${action.range}ft</span>` : ''}
+                        ${action.totalUses ? `<span class="small">${action.remainingUses} / ${action.totalUses}</span>` : ''}
+                    </div>
+                    ${action.description ? `<div class="description small border-top">${action.description}</div>` : ''}
+                </div>`;
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+        console.log(arr[i]);
+        if (i % 2 === 0) {
+            actionsColLeftHTML += getHTML(arr[i]);
+        } else {
+            actionsColRightHTML += getHTML(arr[i]);
+        }
+    }
+
+    console.log(actionsColLeftHTML);
+
+    actions.querySelector('.actions-col-left').innerHTML = actionsColLeftHTML;
+    actions.querySelector('.actions-col-right').innerHTML = actionsColRightHTML;
+}
+
+const applyFilter = (arr, filterTogglesArr, predicate) => {
+    if (filterTogglesArr.every(i => !i.checked)) return arr;
 
     let tempArr = [];
-    if (!includeWeapons && !includeArmor && !includeMisc) {
-        return arr;
-    }
-    if (includeWeapons) {
-        tempArr.push(...arr.filter(i => i.constructor.name === 'Weapon'));
-    }
-    if (includeArmor) { 
-        tempArr.push(...arr.filter(i => i.constructor.name === 'Armor'));
-    } 
-    if (includeMisc) {
-        tempArr.push(...arr.filter(i => i.constructor.name === 'Item'));
+    for (const toggle of filterTogglesArr.filter(toggle => toggle.checked)) {
+        tempArr.push(...arr.filter(i => predicate(i, toggle.value)));
     }
     return tempArr;
 }
 
-const filterToggleBtns = document.querySelectorAll('.toggle-btn-input');
-for (const toggleBtn of filterToggleBtns) {
-    toggleBtn.addEventListener('change', event => {
-        const label = document.querySelector(`label[for=${event.target.id}]`);
-        label.style.backgroundColor = event.target.checked ? 'var(--active-background)' : 'var(--highlight-background)';
-    });
+applyFilter(stone.actions, Array.from(actionsFilter.querySelectorAll('.toggle-btn-input')), 
+    (item, value) => { return item.type === value});
+
+const queryInventory = () => {
+    populateInventory(
+        applyFilter(stone.inventory, Array.from(inventoryFilter.querySelectorAll('.toggle-btn-input')),
+            (item, value) => { return item.constructor.name === value }).sort(compareObjectsByName)
+    );
 }
 
-populateInventory(applyInventoryFilter(stone.inventory));
-inventoryFilter.addEventListener('input', () => {populateInventory(applyInventoryFilter(stone.inventory))});
+const queryActions = () => {
+    populateActions(
+        applyFilter(stone.actions, Array.from(actionsFilter.querySelectorAll('.toggle-btn-input')), 
+            (item, value) => { return item.type === value}).sort(compareObjectsByName)
+    );
+}
+
+queryInventory();
+queryActions();
+inventoryFilter.addEventListener('input', queryInventory);
+actionsFilter.addEventListener('input', queryActions);

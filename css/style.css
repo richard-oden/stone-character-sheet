@@ -30,6 +30,7 @@
 }
 
 .cards {
+    display: flex;
     flex-wrap: wrap;
 }
 
@@ -130,6 +131,36 @@ main {
     grid-area: right-col;
 }
 
+.inventory {
+    margin-top: .5rem;
+    grid-auto-flow: column;
+    column-gap: .5rem;
+}
+
+.bottom-row {
+    grid-template-areas:
+        "resources resources"
+        "filter states"
+        "actions actions";
+    gap: .5rem;
+}
+
+.resources {
+    grid-area: resources;
+}
+
+.bottom-row .filter {
+    grid-area: filter;
+}
+
+.states {
+    grid-area: states;
+}
+
+.actions {
+    grid-area: actions;
+}
+
 /* STYLING =============================== */
 
 body {
@@ -175,6 +206,10 @@ h3 {
     align-items: center;
     justify-content: center;
     flex-grow: 1;
+}
+
+.stat-card small {
+    text-align: center;
 }
 
 .stat-card .row {
@@ -235,6 +270,10 @@ input[type="text"]:active, input[type="text"]:focus {
     background-color: var(--active-background);
 }
 
+.filter > * {
+    flex-grow: 1;
+}
+
 .toggle-btn {
     text-align: center;
     -webkit-touch-callout: none;
@@ -249,28 +288,7 @@ input[type="text"]:active, input[type="text"]:focus {
     display: none;
 }
 
-.inventory {
-    margin-top: .5rem;
-    grid-template-areas:
-        "inv-filter wealth"
-        "items items";
-    column-gap: .5rem;
-}
-
-.inventory-filter {
-    grid-area: inv-filter;
-}
-
-.inventory-filter > * {
-    flex-grow: 1;
-}
-
-.wealth {
-    grid-area: wealth;
-}
-
 .items {
-    grid-area: items;
     overflow-y: auto;
     overflow: auto;
     overflow: -moz-scrollbars-none;
@@ -318,13 +336,22 @@ input[type="text"]:active, input[type="text"]:focus {
     grid-template-columns: 30% auto;
 }
 
-.bottom-row {
-    grid-template-areas:
-        "filter resources"
-        "actions actions";
-    gap: .5rem;
+.resources {
+    justify-content: flex-start;
 }
 
-.resources .stat-card {
-    max-width: 90px;
+.resources > * {
+    flex-grow: unset;
+}
+
+.actions {
+    grid-template-columns: 1fr 1fr;
+}
+
+.action {
+    margin-top: .5rem;
+}
+
+.actions-col-left .action {
+    margin-right: .5rem;
 }

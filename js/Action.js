@@ -13,19 +13,19 @@ class Action {
         return [
             // Move actions:
             new Action('Move', 'Move', null, 'Cost: 5ft per 5ft'),
-            new Action('Climb', 'Move', `${character.skills['Athletics'].fullName} - ${character.skills['Athletics'].roll}`, 
+            new Action('Climb', 'Move', `${character.skills['Athletics'].fullName}: ${character.skills['Athletics'].roll}`, 
                 'Cost: 10ft per 5ft'),
-            new Action('Swim', 'Move', `${character.skills['Athletics'].fullName} - ${character.skills['Athletics'].roll}`, 
+            new Action('Swim', 'Move', `${character.skills['Athletics'].fullName}: ${character.skills['Athletics'].roll}`, 
                 'Cost: 10ft per 5ft'),
-            new Action('Jump', 'Move', `${character.skills['Athletics'].fullName} - ${character.skills['Athletics'].roll} or ${character.skills['Acrobatics'].fullName} - ${character.skills['Acrobatics'].roll}`, 'Cost: 5ft per 5ft'),
+            new Action('Jump', 'Move', `${character.skills['Athletics'].fullName}: ${character.skills['Athletics'].roll} / ${character.skills['Acrobatics'].fullName}: ${character.skills['Acrobatics'].roll}`, 'Cost: 5ft per 5ft'),
             new Action('Crawl', 'Move', null, 'Cost: 10ft per 5ft'),
             new Action('Drop prone', 'Move', null, 'Cost: 0ft'),
             new Action('Stand up', 'Move', null, 'Cost: half movement speed'),
             
             // Standard actions:
-            new Action('Grapple', 'Action', `${character.skills['Athletics'].fullName} - ${character.skills['Athletics'].roll}`, 
+            new Action('Grapple', 'Action', `${character.skills['Athletics'].fullName}: ${character.skills['Athletics'].roll}`, 
                 'Attack. Athletics check contested by target\'s Athletics or Acrobatics check.'),
-            new Action('Shove', 'Action', `${character.skills['Athletics'].fullName} - ${character.skills['Athletics'].roll}`, 
+            new Action('Shove', 'Action', `${character.skills['Athletics'].fullName}: ${character.skills['Athletics'].roll}`, 
                 'Attack. Athletics check contested by target\'s Athletics or Acrobatics check. Knock target prone or push 5 ft away.'),
             new Action('Dash', 'Action', null,
                 'Movement speed is doubled, after applying modifiers.'),
