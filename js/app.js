@@ -122,7 +122,7 @@ basicStats.innerHTML +=
         </div>
     </div>
     <div class="inspiration col bordered stat-card">
-        <small>Inspriation</small>
+        <small>Inspiration</small>
         <div>
             <input type="checkbox" ${stone.inspiration ? ' checked' : ''}></input>
         </div>
@@ -236,18 +236,18 @@ const populateActions = arr => {
     const getHTML = (action) => {
         return `<div class="action col bordered">
                     <div class="item-info grid">
+                        <input type="checkbox" class="toggle-desc small"${action.description ? '' : ' disabled'}></input>
                         <span class="name">${action.name}</span>
                         <span class="small">${action.type}</span>
                         ${action.rolls ? `<span class="small">${action.rolls}</span>` : ''}
                         ${action.range ? `<span class="small">${action.range}ft</span>` : ''}
                         ${action.totalUses ? `<span class="small">${action.remainingUses} / ${action.totalUses}</span>` : ''}
                     </div>
-                    ${action.description ? `<div class="description small border-top">${action.description}</div>` : ''}
+                    ${action.description ? `<div class="description small border-top" style="display: none">${action.description}</div>` : ''}
                 </div>`;
     }
 
     for (let i = 0; i < arr.length; i++) {
-        console.log(arr[i]);
         if (i % 2 === 0) {
             actionsColLeftHTML += getHTML(arr[i]);
         } else {
@@ -255,35 +255,46 @@ const populateActions = arr => {
         }
     }
 
-    console.log(actionsColLeftHTML);
-
     actions.querySelector('.actions-col-left').innerHTML = actionsColLeftHTML;
     actions.querySelector('.actions-col-right').innerHTML = actionsColRightHTML;
+
+    const actionCards = document.querySelectorAll('.action');
+    for (const actionCard of actionCards) {
+        actionCard.addEventListener('click', event => {
+            if (event.target.classList.contains('toggle-desc')) {
+                const description = actionCard.querySelector('.description');
+                description.style.display = event.target.checked ? 'block' : 'none';
+            }
+        });
+    }
 }
 
-const applyFilter = (arr, filterTogglesArr, predicate) => {
-    if (filterTogglesArr.every(i => !i.checked)) return arr;
+const applyFilter = (arr, filterElement, predicate) => {
+    const searchInput = filterElement.querySelector('.search').value.toLowerCase();
+    if (searchInput) arr = arr.filter(i => 
+        i.name.toLowerCase().includes(searchInput) 
+        || i.description && i.description.toLowerCase().includes(searchInput));
+
+    const checkedToggles = Array.from(filterElement.querySelectorAll('.toggle-btn-input')).filter(toggle => toggle.checked);
+    if (!checkedToggles.length) return arr;
 
     let tempArr = [];
-    for (const toggle of filterTogglesArr.filter(toggle => toggle.checked)) {
+    for (const toggle of checkedToggles) {
         tempArr.push(...arr.filter(i => predicate(i, toggle.value)));
     }
     return tempArr;
 }
 
-applyFilter(stone.actions, Array.from(actionsFilter.querySelectorAll('.toggle-btn-input')), 
-    (item, value) => { return item.type === value});
-
 const queryInventory = () => {
     populateInventory(
-        applyFilter(stone.inventory, Array.from(inventoryFilter.querySelectorAll('.toggle-btn-input')),
+        applyFilter(stone.inventory, inventoryFilter,
             (item, value) => { return item.constructor.name === value }).sort(compareObjectsByName)
     );
 }
 
 const queryActions = () => {
     populateActions(
-        applyFilter(stone.actions, Array.from(actionsFilter.querySelectorAll('.toggle-btn-input')), 
+        applyFilter(stone.actions, actionsFilter, 
             (item, value) => { return item.type === value}).sort(compareObjectsByName)
     );
 }
