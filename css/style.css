@@ -138,8 +138,9 @@ main {
 }
 
 .bottom-row {
+    /* grid-template-columns: 2fr 1fr; */
     grid-template-areas:
-        "resources resources"
+        "resources states"
         "filter states"
         "actions actions";
     gap: .5rem;
@@ -227,7 +228,8 @@ h3 {
     text-align: right;
 }
 
-.inspiration small {
+.inspiration small,
+.states .stat-card small {
     margin-bottom: .5rem;
 }
 
@@ -336,12 +338,16 @@ input[type="text"]:active, input[type="text"]:focus {
     grid-template-columns: 30% auto;
 }
 
-.resources {
+.resources, .states {
     justify-content: flex-start;
 }
 
-.resources > * {
-    flex-grow: unset;
+.states {
+    align-items: flex-end;
+}
+
+.states .stat-card {
+    max-height: 60%;
 }
 
 .actions {

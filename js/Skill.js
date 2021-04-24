@@ -13,7 +13,7 @@ class Skill {
         new Skill('Deception', 'CHA'),
         new Skill('History', 'INT'),
         new Skill('Insight', 'WIS'),
-        new Skill('Intimdation', 'CHA'),
+        new Skill('Intimidation', 'CHA'),
         new Skill('Investigation', 'INT'),
         new Skill('Medicine', 'WIS'),
         new Skill('Nature', 'INT'),
