@@ -1,0 +1,86 @@
+{
+    "name": "Stone",
+    "level": 11,
+    "currentHitPoints": 127,
+    "tempHitPoints": 0,
+    "currentHitDice": 11,
+    "inspiration": false,
+    "abilityScores": {
+        "STR": 18,
+        "DEX": 10,
+        "CON": 18,
+        "INT": 14,
+        "WIS": 12,
+        "CHA": 8
+    },
+    "deathSaves": {
+        "successes": 0,
+        "failures": 0
+    },
+    "wealth": 432,
+    "attunedItemNames": [
+        "Enchantment of Protection (Cloak of Protection)",
+        "Auto Stabilizer (Periapt of Wound Closure)",
+        "Ring of Mind Shielding"
+    ],
+    "resources": [
+        {
+            "name": "Second Wind",
+            "remainingUses": 1
+        },
+        {
+            "name": "Invoke Fire Rune",
+            "remainingUses": 1
+        },
+        {
+            "name": "Invoke Frost Rune",
+            "remainingUses": 1
+        },
+        {
+            "name": "Invoke Hill Rune",
+            "remainingUses": 1
+        },
+        {
+            "name": "Invoke Storm Rune",
+            "remainingUses": 1
+        },
+        {
+            "name": "Augment Size (Giant's Might)",
+            "remainingUses": 4
+        },
+        {
+            "name": "Runic Shield",
+            "remainingUses": 4
+        },
+        {
+            "name": "Action Surge",
+            "remainingUses": 1
+        },
+        {
+            "name": "Indomitable",
+            "remainingUses": 1
+        },
+        {
+            "name": "Clockwork Amulet",
+            "remainingUses": 1
+        }
+    ],
+    "states": [
+        {
+            "name": "Frost Rune Invoked",
+            "isActive": false
+        },
+        {
+            "name": "Hill Rune Invoked",
+            "isActive": false
+        },
+        {
+            "name": "Storm Rune Invoked",
+            "isActive": false
+        },
+        {
+            "name": "Augmented Size",
+            "isActive": false
+        }
+    ]
+}

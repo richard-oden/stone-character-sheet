@@ -1,0 +1,23 @@
+{
+  "name": "stone-character-sheet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richard-oden/stone-character-sheet.git"
+  },
+  "author": "Richard Oden",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/richard-oden/stone-character-sheet/issues"
+  },
+  "homepage": "https://github.com/richard-oden/stone-character-sheet#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

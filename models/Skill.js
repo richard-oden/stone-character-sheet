@@ -26,3 +26,5 @@ class Skill {
         new Skill('Survival', 'WIS'),
     ];
 }
+
+module.exports = Skill;

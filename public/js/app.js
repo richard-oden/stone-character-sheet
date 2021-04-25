@@ -15,7 +15,25 @@ const resources = document.querySelector('.resources');
 const states = document.querySelector('.states');
 const actions = document.querySelector('.actions');
 
-const getClasses = (queryItem, queryType = '', profArr = []) => {
+const filterToggleBtns = document.querySelectorAll('.toggle-btn-input');
+for (const toggleBtn of filterToggleBtns) {
+    toggleBtn.addEventListener('change', event => {
+        const label = document.querySelector(`label[for=${event.target.id}]`);
+        label.style.backgroundColor = event.target.checked ? 'var(--active-background)' : 'var(--highlight-background)';
+    });
+}
+
+// Handles all JSON ajax requests:
+const getJSON = async url => {
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      throw error;
+    }
+}
+
+const getClasses = (stone, queryItem, queryType = '', profArr = []) => {
     const isProf = profArr.includes(queryItem);
     const isAdv = stone.advantage.some(a => 
         a.toLowerCase().includes(queryItem.toLowerCase()) 
@@ -35,12 +53,12 @@ const getClasses = (queryItem, queryType = '', profArr = []) => {
     return style;
 }
 
-const generateTopLeftCornerHTML = () => {
+const generateTopLeftCornerHTML = stone => {
     characterName.textContent = stone.name;
     basicInfo.textContent = `lvl ${stone.level} ${stone.race} ${stone.subclass} ${stone.class}`;
 }
 
-const generateTopRowHTML = () => {
+const generateTopRowHTML = stone => {
     let topRowHTML = '';
     for (const abil in stone.abilityScores) {
         const label = abil;
@@ -52,8 +70,8 @@ const generateTopRowHTML = () => {
         `
             <div class="abil col bordered stat-card">
                 <small>${label}</small>
-                <div class="fig-l${getClasses(abil, 'check')}">${score} / ${mod > 0 ? '+' : ''}${mod}</div>
-                <div class="fig-m${getClasses(abil, 'saving throw', stone.proficiencies.savingThrows)}">
+                <div class="fig-l${getClasses(stone, abil, 'check')}">${score} / ${mod > 0 ? '+' : ''}${mod}</div>
+                <div class="fig-m${getClasses(stone, abil, 'saving throw', stone.proficiencies.savingThrows)}">
                     (${savingThrow > 0 ? '+' : ''}${savingThrow})
                 </div>
             </div>
@@ -77,10 +95,10 @@ const generateTopRowHTML = () => {
     topRow.innerHTML = topRowHTML;
 }
 
-const generateSkillsHTML = () => {
+const generateSkillsHTML = stone => {
     skillsHTML = '';
     for (const skill in stone.skills) {
-        const cssClass = `${getClasses(skill, '', stone.proficiencies.skills)} ${getClasses(stone.skills[skill].ability, 'check')}`;
+        const cssClass = `${getClasses(stone, skill, '', stone.proficiencies.skills)} ${getClasses(stone, stone.skills[skill].ability, 'check')}`;
         skillsHTML +=
         `
             <div class="grid skill border-bottom ellipsis${cssClass}">
@@ -93,8 +111,8 @@ const generateSkillsHTML = () => {
     skills.innerHTML = skillsHTML;
 }
 
-const generateBasicStatsHTML = () => {
-    basicStats.innerHTML +=
+const generateBasicStatsHTML = stone => {
+    basicStats.innerHTML =
     `
         <div class="hit-points col bordered stat-card">
             <small>Hit Points</small>
@@ -139,7 +157,7 @@ const generateBasicStatsHTML = () => {
     `;
 }
 
-const generateWealthHTML = () => {
+const generateWealthHTML = stone => {
     wealth.innerHTML =
     `
         <small>Wealth</small>
@@ -147,7 +165,7 @@ const generateWealthHTML = () => {
     `;
 }
 
-const generateSituationalInfoHTML = () => {
+const generateSituationalInfoHTML = stone => {
     let situationalInfoHTML = '';
     situationalInfoHTML += 
     `<h3 class="advantage">Advantage</h3>
@@ -177,7 +195,7 @@ const generateSituationalInfoHTML = () => {
     situationalInfo.innerHTML = situationalInfoHTML;
 }
 
-const generateResourcesHTML = () => {
+const generateResourcesHTML = stone => {
     resourcesHTML = '';
     const limitedActions = stone.actions
         .filter(a => a.totalUses > 0)
@@ -194,34 +212,31 @@ const generateResourcesHTML = () => {
     resources.innerHTML = resourcesHTML;
 }
 
-const generateStatesHTML = () => {
+const generateStatesHTML = stone => {
     statesHTML = '';
-    const actionsWithStates = stone.actions
-        .filter(a => a.state)
-        .sort(compareObjectsByName);
-    for (const action of actionsWithStates) {
+    for (const state of stone.states) {
         statesHTML +=
         `
         <div class="col bordered stat-card">
-            <small class="ellipsis">${shortenResourceName(action.name)}</small>
+            <small class="ellipsis">${state.name}</small>
             <div>
-                <input type="checkbox" ${action.state.isActive ? ' checked' : ''}></input>
+                <input type="checkbox" value="${state.name}" ${state.isActive ? ' checked' : ''}></input>
             </div>
         </div>
         `;
     }
     states.innerHTML = statesHTML;
+
+    const statesToggles = states.querySelectorAll('input');
+    for (const toggle of statesToggles) {
+        toggle.addEventListener('change', () => {
+            stone.states.find(s => s.name === toggle.value).toggle();
+            generateSkillsHTML(), generateTopRowHTML(), generateBasicStatsHTML(), generateSituationalInfoHTML();
+        });
+    }
 }
 
-const filterToggleBtns = document.querySelectorAll('.toggle-btn-input');
-for (const toggleBtn of filterToggleBtns) {
-    toggleBtn.addEventListener('change', event => {
-        const label = document.querySelector(`label[for=${event.target.id}]`);
-        label.style.backgroundColor = event.target.checked ? 'var(--active-background)' : 'var(--highlight-background)';
-    });
-}
-
-const generateItemsHTML = arr => {
+const generateItemsHTML = (stone, arr) => {
     let inventoryHTML = '';
     for (const item of arr) {
         const attunementHTML = item.attunement ? 
@@ -237,7 +252,6 @@ const generateItemsHTML = arr => {
                     <input type="checkbox" class="toggle-desc small"${item.description ? '' : ' disabled'}></input>
                     <span class="name">${item.name}</span>
                     ${item.armorClass ? `<span class="small">AC: ${item.armorClass}</span>` : ''}
-                    ${item.damage ? `<span class="small">${item.getRollsString(stone)}</span>` : ''}
                     ${item.range ? `<span class="small">${item.range}ft</span>` : ''}
                     ${attunementHTML}
                 </div>
@@ -265,7 +279,7 @@ const generateItemsHTML = arr => {
     }
 }
 
-const generateActionsHTML = arr => {
+const generateActionsHTML = (stone, arr) => {
     let actionsColLeftHTML = '';
     let actionsColRightHTML = '';
     const getHTML = (action) => {
@@ -320,29 +334,35 @@ const applyFilter = (arr, filterElement, predicate) => {
     return tempArr;
 }
 
-const queryInventory = () => {
-    generateItemsHTML(
+const queryInventory = stone => {
+    generateItemsHTML(stone,
         applyFilter(stone.inventory, inventoryFilter,
             (item, value) => { return item.constructor.name === value }).sort(compareObjectsByName)
     );
 }
 
-const queryActions = () => {
-    generateActionsHTML(
+const queryActions = stone => {
+    generateActionsHTML(stone,
         applyFilter(stone.actions, actionsFilter, 
             (item, value) => { return item.type === value}).sort(compareObjectsByName)
     );
 }
 
-generateTopLeftCornerHTML();
-generateTopRowHTML();
-generateSkillsHTML();
-generateBasicStatsHTML();
-generateWealthHTML();
-generateSituationalInfoHTML();
-generateResourcesHTML();
-generateStatesHTML();
-queryInventory();
-queryActions();
-inventoryFilter.addEventListener('input', queryInventory);
-actionsFilter.addEventListener('input', queryActions);
+const loadAllContent = async () => {
+    const stone = await getJSON('get');
+    console.log(stone);
+    generateTopLeftCornerHTML(stone);
+    generateTopRowHTML(stone);
+    generateSkillsHTML(stone);
+    generateBasicStatsHTML(stone);
+    generateWealthHTML(stone);
+    generateSituationalInfoHTML(stone);
+    generateResourcesHTML(stone);
+    generateStatesHTML(stone);
+    queryInventory(stone);
+    queryActions(stone);
+    inventoryFilter.addEventListener('input', queryInventory);
+    actionsFilter.addEventListener('input', queryActions);
+}
+
+loadAllContent();

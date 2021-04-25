@@ -1,5 +1,5 @@
 class Action {
-    constructor(name, type, rolls, description, range = null, remainingUses = null, totalUses = null, state = null) {
+    constructor(name, type, rolls, description, range = null, remainingUses = null, totalUses = null) {
         this.name = name;
         this.type = type;
         this.rolls = rolls;
@@ -7,7 +7,6 @@ class Action {
         this.range = range;
         this.remainingUses = remainingUses;
         this.totalUses = totalUses;
-        this.state = state;
     }
 
     static getActionLookUp(character)  {
@@ -47,19 +46,4 @@ class Action {
     }
 }
 
-class State {
-    constructor(isActive, activate, deactivate) {
-        this.isActive = isActive;
-        this._activate = activate;
-        this._deactivate = deactivate;
-        this.toggle = () => {
-            if (this.isActive) {
-                this._deactivate();
-                this.isActive = false;
-            } else {
-                this._activate();
-                this.isActive = true;
-            }
-        }
-    }
-}
+module.exports = Action;
