@@ -23,6 +23,19 @@ for (const toggleBtn of filterToggleBtns) {
     });
 }
 
+const toggleDescHandler = event => {
+    let queryElement = event.target.parentElement;
+    let description;
+    let attempts = 0;
+    while (!description && attempts < 10) {
+        description = queryElement.querySelector(`.${event.target.value}`);
+        queryElement = queryElement.parentElement;
+        attempts++;
+    }
+    if (description)
+        description.style.display = event.target.checked ? 'flex' : 'none';
+}
+
 // Handles all JSON ajax requests:
 const getJSON = async url => {
     try {
@@ -168,31 +181,76 @@ const generateWealthHTML = stone => {
 const generateSituationalInfoHTML = stone => {
     let situationalInfoHTML = '';
     situationalInfoHTML += 
-    `<h3 class="advantage">Advantage</h3>
-        <div class="col border-bottom-l">`
-            for (const adv of stone.advantage) {
-                situationalInfoHTML += `<span class="small">${adv}</span>`;
-            }
+    `<h3 class="advantage toggle-header">
+        <input type="checkbox" value="advantage-desc" class="toggle-desc small" ${stone.advantage.some ? 'checked' : 'disabled'}></input>
+        Advantage
+    </h3>
+    <div class="border-bottom-l"><div class="col advantage-desc sit-wrap">`
+        for (const adv of stone.advantage) {
+            situationalInfoHTML += `<span class="small">${adv}</span>`;
+        }
     situationalInfoHTML += 
-    `   </div>
-    <h3 class="disadvantage">Disadvantage</h3>
-        <div class="col border-bottom-l">`
-            for (const disadv of stone.disadvantage) {
-                situationalInfoHTML += `<span class="small">${disadv}</span>`;
-            }
+    `</div></div>
+    <h3 class="disadvantage toggle-header">
+        <input type="checkbox" value="disadvantage-desc" class="toggle-desc small" ${stone.disadvantage.some ? 'checked' : 'disabled'}></input>
+        Disadvantage
+    </h3>
+    <div class="border-bottom-l"><div class="col disadvantage-desc sit-wrap">`
+        for (const disadv of stone.disadvantage) {
+            situationalInfoHTML += `<span class="small">${disadv}</span>`;
+        }
     situationalInfoHTML += 
-    `   </div>
-    <h3 class="proficient">Proficiencies</h3>
-        <div class="col border-bottom-l">`
-            for (const prof in stone.proficiencies) {
-                situationalInfoHTML += 
-                `<span class="small grid prof-category">
-                    <b>${unCamelCase(prof)}:&nbsp</b>
-                    <span>${toCommaSeparatedList(stone.proficiencies[prof])}</span>
-                </span>`;
-            }
-    situationalInfoHTML += '</div>'
+    `</div></div>
+    <h3 class="toggle-header">
+        <input type="checkbox" value="resistances-desc" class="toggle-desc small" ${stone.resistances.some ? 'checked' : 'disabled'}></input>
+        Resistances
+    </h3>
+    <div class="border-bottom-l"><div class="col resistances-desc sit-wrap">`
+        for (const resistance of stone.resistances) {
+            situationalInfoHTML += `<span class="small">${resistance}</span>`;
+        }
+    situationalInfoHTML += 
+    `</div></div>
+    <h3 class="toggle-header">
+        <input type="checkbox" value="immunities-desc" class="toggle-desc small" ${stone.immunities.some ? 'checked' : ' disabled'}></input>
+        Immunities
+    </h3>
+    <div class="border-bottom-l"><div class="col immunities-desc sit-wrap">`
+        for (const immunity of stone.immunities) {
+            situationalInfoHTML += `<span class="small">${immunity}</span>`;
+        }
+    situationalInfoHTML += 
+    `</div></div>
+    <h3 class="toggle-header">
+        <input type="checkbox" value="miscellaneous-desc" class="toggle-desc small" ${stone.miscellaneous.some ? 'checked' : ' disabled'}></input>
+        Miscellaneous
+    </h3>
+    <div class="border-bottom-l"><div class="col miscellaneous-desc sit-wrap">`
+        for (const misc of stone.miscellaneous) {
+            situationalInfoHTML += `<span class="small">${misc}</span>`;
+        }
+    situationalInfoHTML += 
+    `</div></div>
+    <h3 class="proficient toggle-header">
+        <input type="checkbox" value="proficiencies-desc" class="toggle-desc small" checked></input>
+        Proficiencies
+    </h3>
+    <div class="border-bottom-l"><div class="col proficiencies-desc sit-wrap">`
+        for (const prof in stone.proficiencies) {
+            situationalInfoHTML += 
+            `<span class="small grid prof-category">
+                <b>${unCamelCase(prof)}:&nbsp</b>
+                <span>${toCommaSeparatedList(stone.proficiencies[prof])}</span>
+            </span>`;
+        }
+    situationalInfoHTML += '</div></div>'
     situationalInfo.innerHTML = situationalInfoHTML;
+
+    situationalInfo.addEventListener('click', event => {
+        if (event.target.classList.contains('toggle-desc')) {
+            toggleDescHandler(event);
+        }
+    });
 }
 
 const generateResourcesHTML = stone => {
@@ -248,14 +306,14 @@ const generateItemsHTML = (stone, arr) => {
         inventoryHTML +=
         `
             <div class="item col bordered">
-                <div class="item-info grid">
-                    <input type="checkbox" class="toggle-desc small"${item.description ? '' : ' disabled'}></input>
+                <div class="item-info toggle-header">
+                    <input type="checkbox" value="item-desc" class="toggle-desc small"${item.description ? '' : ' disabled'}></input>
                     <span class="name">${item.name}</span>
                     ${item.armorClass ? `<span class="small">AC: ${item.armorClass}</span>` : ''}
                     ${item.range ? `<span class="small">${item.range}ft</span>` : ''}
                     ${attunementHTML}
                 </div>
-                ${item.description ? `<div class="description small border-top" style="display: none">${item.description}</div>` : ''}
+                ${item.description ? `<div class="description item-desc small border-top" style="display: none">${item.description}</div>` : ''}
             </div>
         `;
     }
@@ -265,8 +323,7 @@ const generateItemsHTML = (stone, arr) => {
     for (const itemCard of itemCards) {
         itemCard.addEventListener('click', event => {
             if (event.target.classList.contains('toggle-desc')) {
-                const description = itemCard.querySelector('.description');
-                description.style.display = event.target.checked ? 'block' : 'none';
+                toggleDescHandler(event);
             } else if (event.target.classList.contains('toggle-attuned')) {
                 const name = itemCard.querySelector('.name').textContent;
                 if (event.target.checked && stone.attunedItemNames.includes(name)) {
@@ -284,15 +341,15 @@ const generateActionsHTML = (stone, arr) => {
     let actionsColRightHTML = '';
     const getHTML = (action) => {
         return `<div class="action col bordered">
-                    <div class="item-info grid">
-                        <input type="checkbox" class="toggle-desc small"${action.description ? '' : ' disabled'}></input>
+                    <div class="toggle-header">
+                        <input type="checkbox" value="action-desc" class="toggle-desc small"${action.description ? '' : ' disabled'}></input>
                         <span class="name">${action.name}</span>
                         <span class="small">${action.type}</span>
                         ${action.rolls ? `<span class="small">${action.rolls}</span>` : ''}
                         ${action.range ? `<span class="small">${action.range}ft</span>` : ''}
                         ${action.totalUses ? `<span class="small">${action.remainingUses} / ${action.totalUses}</span>` : ''}
                     </div>
-                    ${action.description ? `<div class="description small border-top" style="display: none">${action.description}</div>` : ''}
+                    ${action.description ? `<div class="description action-desc small border-top" style="display: none">${action.description}</div>` : ''}
                 </div>`;
     }
 
@@ -311,8 +368,7 @@ const generateActionsHTML = (stone, arr) => {
     for (const actionCard of actionCards) {
         actionCard.addEventListener('click', event => {
             if (event.target.classList.contains('toggle-desc')) {
-                const description = actionCard.querySelector('.description');
-                description.style.display = event.target.checked ? 'block' : 'none';
+                toggleDescHandler(event);
             }
         });
     }
@@ -361,8 +417,8 @@ const loadAllContent = async () => {
     generateStatesHTML(stone);
     queryInventory(stone);
     queryActions(stone);
-    inventoryFilter.addEventListener('input', queryInventory);
-    actionsFilter.addEventListener('input', queryActions);
+    inventoryFilter.addEventListener('input', () => {queryInventory(stone)});
+    actionsFilter.addEventListener('input', () => {queryActions(stone)});
 }
 
 loadAllContent();
