@@ -16,7 +16,7 @@ const createStoneObj = () => {
         level: 11,
     
         currentHitPoints: base.currentHitPoints,
-        maxHitPoints: 127,
+        maxHitPoints: 141,
         tempHitPoints: base.tempHitPoints,
         hitDie: 'd10',
         currentHitDice: base.currentHitDice,

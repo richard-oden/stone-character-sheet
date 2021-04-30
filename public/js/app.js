@@ -36,6 +36,24 @@ const toggleDescHandler = event => {
         description.style.display = event.target.checked ? 'flex' : 'none';
 }
 
+const contentEditableHandler = async event => {
+    const obj = {
+        propPath: event.target.id,
+        value: isNumeric(event.target.textContent) 
+            ? parseInt(event.target.textContent)
+            : event.target.textContent
+    }
+    console.log(obj);
+    const response = await fetch('/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(obj)
+    });
+    console.log(response);
+}
+
 // Handles all JSON ajax requests:
 const getJSON = async url => {
     try {
@@ -83,7 +101,10 @@ const generateTopRowHTML = stone => {
         `
             <div class="abil col bordered stat-card">
                 <small>${label}</small>
-                <div class="fig-l${getClasses(stone, abil, 'check')}">${score} / ${mod > 0 ? '+' : ''}${mod}</div>
+                <div class="fig-l${getClasses(stone, abil, 'check')}">
+                    <span id="abilityScores_${abil}" contenteditable="true">${score}</span> 
+                    <span>/ ${mod > 0 ? '+' : ''}${mod}<span>
+                </div>
                 <div class="fig-m${getClasses(stone, abil, 'saving throw', stone.proficiencies.savingThrows)}">
                     (${savingThrow > 0 ? '+' : ''}${savingThrow})
                 </div>
@@ -100,8 +121,8 @@ const generateTopRowHTML = stone => {
                 <span>${stone.deathSaves.failures}&nbsp</span>
             </div>
             <div class="row">
-                <small>success</small>
-                <small>failure</small>
+                <small id="deathSaves_successes" contenteditable="true">success</small>
+                <small id="deathSaves_failures" contenteditable="true">failure</small>
             </div>
         </div>
     `;
@@ -129,12 +150,14 @@ const generateBasicStatsHTML = stone => {
     `
         <div class="hit-points col bordered stat-card">
             <small>Hit Points</small>
-            <div class="fig-l">${stone.currentHitPoints}+${stone.tempHitPoints}</div>
+            <div class="fig-l">
+                <span id="currentHitPoints" contenteditable="true">${stone.currentHitPoints}</span>+<span id="tempHitPoints" contenteditable="true">${stone.tempHitPoints}</span>
+            </div>
             <small>${stone.maxHitPoints} total</small>
         </div>
         <div class="hit-dice col bordered stat-card">
             <small>Hit Dice</small>
-            <div class="fig-l"> ${stone.currentHitDice}</div>
+            <div id="currentHitDice" class="fig-l" contenteditable="true">${stone.currentHitDice}</div>
             <small>${stone.maxHitDice}${stone.hitDie} total</small>
         </div>
         <div class="ac col bordered stat-card">
@@ -174,7 +197,7 @@ const generateWealthHTML = stone => {
     wealth.innerHTML =
     `
         <small>Wealth</small>
-        <div class="fig-m">${stone.wealth}</div>
+        <div id="wealth" class="fig-m" contenteditable="true">${stone.wealth}</div>
     `;
 }
 
@@ -263,7 +286,10 @@ const generateResourcesHTML = stone => {
         `
         <div class="col bordered stat-card">
             <small class="ellipsis">${shortenResourceName(action.name)}</small>
-            <div class="fig-m">${action.remainingUses} / ${action.totalUses}</div>
+            <div class="fig-m">
+                <span contenteditable="true">${action.remainingUses}</span> 
+                <span>/ ${action.totalUses}</span>
+            </div>
         </div>
         `;
     }
@@ -419,6 +445,10 @@ const loadAllContent = async () => {
     queryActions(stone);
     inventoryFilter.addEventListener('input', () => {queryInventory(stone)});
     actionsFilter.addEventListener('input', () => {queryActions(stone)});
+
+    document.querySelectorAll('[contenteditable="true"]').forEach(element => {
+        element.addEventListener('input', contentEditableHandler);
+    });
 }
 
 loadAllContent();

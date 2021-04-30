@@ -28,3 +28,7 @@ const compareObjectsByName = (obj1, obj2) => {
     }
     return 0;
 }
+
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
