@@ -1,8 +1,8 @@
 class Skill {
     constructor(skillName, skillAbility) {
-        this.name = skillName;
-        this.ability = skillAbility;
-        this.fullName = `${skillName} (${skillAbility})`;
+        this.name = skillName,
+        this.ability = skillAbility,
+        this.fullName = `${skillName} (${skillAbility})`
     }
 
     static skillsLookUp = [

@@ -367,11 +367,11 @@ const generateActionsHTML = (stone, arr) => {
     let actionsColLeftHTML = '';
     let actionsColRightHTML = '';
     const getHTML = (action) => {
-        return `<div class="action col bordered">
+        return `<div class="action col bordered${action.remainingUses != null && action.remainingUses <= 0 ? ' expended' : ''}">
                     <div class="toggle-header">
                         <input type="checkbox" value="action-desc" class="toggle-desc small"${action.description ? '' : ' disabled'}></input>
                         <span class="name">${action.name}</span>
-                        <span class="small">${action.type}</span>
+                        <span class="small">${shortenResourceName(action.type)}</span>
                         ${action.rolls ? `<span class="small">${action.rolls}</span>` : ''}
                         ${action.range ? `<span class="small">${action.range}ft</span>` : ''}
                         ${action.totalUses ? `<span class="small">${action.remainingUses} / ${action.totalUses}</span>` : ''}
@@ -401,7 +401,7 @@ const generateActionsHTML = (stone, arr) => {
     }
 }
 
-const applyFilter = (arr, filterElement, predicate) => {
+const applyFilter = (arr, filterElement) => {
     const searchInput = filterElement.querySelector('.search').value.toLowerCase();
     if (searchInput) arr = arr.filter(i => 
         i.name.toLowerCase().includes(searchInput) 
@@ -412,23 +412,17 @@ const applyFilter = (arr, filterElement, predicate) => {
 
     let tempArr = [];
     for (const toggle of checkedToggles) {
-        tempArr.push(...arr.filter(i => predicate(i, toggle.value)));
+        tempArr.push(...arr.filter(i => i.type.includes(toggle.value)));
     }
-    return tempArr;
+    return tempArr.sort(compareObjectsByName);
 }
 
 const queryInventory = stone => {
-    generateItemsHTML(stone,
-        applyFilter(stone.inventory, inventoryFilter,
-            (item, value) => { return item.constructor.name === value }).sort(compareObjectsByName)
-    );
+    generateItemsHTML(stone, applyFilter(stone.inventory, inventoryFilter));
 }
 
 const queryActions = stone => {
-    generateActionsHTML(stone,
-        applyFilter(stone.actions, actionsFilter, 
-            (item, value) => { return item.type === value}).sort(compareObjectsByName)
-    );
+    generateActionsHTML(stone, applyFilter(stone.actions, actionsFilter));
 }
 
 const resetFilterEventListeners = stone => {

@@ -3,12 +3,13 @@ const Item = require('./Item');
 class Weapon extends Item {
     constructor(name, weaponType, properties, range, damage,
         enchantment = 0, description = "", requiresAttunement = false) {
-        super(name, description, requiresAttunement);
-        this.type = weaponType;
-        this.properties = properties;
-        this.range = range;
-        this.damage = damage;
-        this.enchantment = enchantment;
+        super(name, description, requiresAttunement),
+        this.type = weaponType,
+        this.properties = properties,
+        this.range = range,
+        this.damage = damage,
+        this.enchantment = enchantment,
+        this.type = 'Weapon',
         this.getRollsString = (character, extraAttackMod = 0, extraDamageMod = 0) => {
             let mod = character.abilityScoreMods.STR;
             if (this.enchantment) mod += this.enchantment;

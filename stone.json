@@ -36,7 +36,7 @@
         "Clockwork Amulet": 1
     },
     "states": {
-        "Frost Rune Invoked": true,
+        "Frost Rune Invoked": false,
         "Hill Rune Invoked": false,
         "Storm Rune Invoked": false,
         "Augmented Size": false
