@@ -36,22 +36,25 @@ const toggleDescHandler = event => {
         description.style.display = event.target.checked ? 'flex' : 'none';
 }
 
-const contentEditableHandler = async event => {
-    const obj = {
-        propPath: event.target.id,
-        value: isNumeric(event.target.textContent) 
-            ? parseInt(event.target.textContent)
-            : event.target.textContent
-    }
-    console.log(obj);
-    const response = await fetch('/save', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(obj)
-    });
-    console.log(response);
+let postTimeout = null;
+const postHandler = async (event, onSuccess) => {
+    clearTimeout(postTimeout);
+    postTimeout = setTimeout(async () => {
+        const obj = {
+            propPath: event.target.id,
+            value: event.target.type === 'checkbox' 
+                ? event.target.checked
+                : parseIntIfNumeric(event.target.textContent)
+        }
+        const res = await fetch('/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(obj)
+        });
+        if (onSuccess) onSuccess(await res.json());
+    }, 1000);
 }
 
 // Handles all JSON ajax requests:
@@ -86,7 +89,8 @@ const getClasses = (stone, queryItem, queryType = '', profArr = []) => {
 
 const generateTopLeftCornerHTML = stone => {
     characterName.textContent = stone.name;
-    basicInfo.textContent = `lvl ${stone.level} ${stone.race} ${stone.subclass} ${stone.class}`;
+    basicInfo.innerHTML = `lvl <span id="level" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">${stone.level}</span> ${stone.race} ${stone.subclass}`;
+    basicInfo.parentElement.addEventListener('input', e => postHandler(e, loadAllContent))
 }
 
 const generateTopRowHTML = stone => {
@@ -102,7 +106,7 @@ const generateTopRowHTML = stone => {
             <div class="abil col bordered stat-card">
                 <small>${label}</small>
                 <div class="fig-l${getClasses(stone, abil, 'check')}">
-                    <span id="abilityScores_${abil}" contenteditable="true">${score}</span> 
+                    <span id="abilityScores_${abil}" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">${score}</span> 
                     <span>/ ${mod > 0 ? '+' : ''}${mod}<span>
                 </div>
                 <div class="fig-m${getClasses(stone, abil, 'saving throw', stone.proficiencies.savingThrows)}">
@@ -116,17 +120,18 @@ const generateTopRowHTML = stone => {
         <div class="death-saves col bordered stat-card">
             <small>Death Saves</small>
             <div class="row fig-xl">
-                <span>&nbsp${stone.deathSaves.successes}</span>
+                <span id="deathSaves_successes" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">&nbsp${stone.deathSaves.successes}</span>
                 <span>:</span>
-                <span>${stone.deathSaves.failures}&nbsp</span>
+                <span id="deathSaves_failures" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">${stone.deathSaves.failures}&nbsp</span>
             </div>
             <div class="row">
-                <small id="deathSaves_successes" contenteditable="true">success</small>
-                <small id="deathSaves_failures" contenteditable="true">failure</small>
+                <small>success</small>
+                <small>failure</small>
             </div>
         </div>
     `;
     topRow.innerHTML = topRowHTML;
+    topRow.addEventListener('input', async e => postHandler(e, loadAllContent));
 }
 
 const generateSkillsHTML = stone => {
@@ -151,13 +156,13 @@ const generateBasicStatsHTML = stone => {
         <div class="hit-points col bordered stat-card">
             <small>Hit Points</small>
             <div class="fig-l">
-                <span id="currentHitPoints" contenteditable="true">${stone.currentHitPoints}</span>+<span id="tempHitPoints" contenteditable="true">${stone.tempHitPoints}</span>
+                <span id="currentHitPoints" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">${stone.currentHitPoints}</span>+<span id="tempHitPoints" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">${stone.tempHitPoints}</span>
             </div>
             <small>${stone.maxHitPoints} total</small>
         </div>
         <div class="hit-dice col bordered stat-card">
             <small>Hit Dice</small>
-            <div id="currentHitDice" class="fig-l" contenteditable="true">${stone.currentHitDice}</div>
+            <div id="currentHitDice" class="fig-l" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">${stone.currentHitDice}</div>
             <small>${stone.maxHitDice}${stone.hitDie} total</small>
         </div>
         <div class="ac col bordered stat-card">
@@ -187,18 +192,20 @@ const generateBasicStatsHTML = stone => {
         <div class="inspiration col bordered stat-card">
             <small>Inspiration</small>
             <div>
-                <input type="checkbox" ${stone.inspiration ? ' checked' : ''}></input>
+                <input id="inspiration" type="checkbox" ${stone.inspiration ? ' checked' : ''}></input>
             </div>
         </div>
     `;
+    basicStats.addEventListener('input', postHandler)
 }
 
 const generateWealthHTML = stone => {
     wealth.innerHTML =
     `
         <small>Wealth</small>
-        <div id="wealth" class="fig-m" contenteditable="true">${stone.wealth}</div>
+        <div id="wealth" class="fig-m" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">${stone.wealth}</div>
     `;
+    wealth.addEventListener('input', postHandler);
 }
 
 const generateSituationalInfoHTML = stone => {
@@ -287,13 +294,14 @@ const generateResourcesHTML = stone => {
         <div class="col bordered stat-card">
             <small class="ellipsis">${shortenResourceName(action.name)}</small>
             <div class="fig-m">
-                <span contenteditable="true">${action.remainingUses}</span> 
+                <span id="resources_${action.name.replace(/ /g, '-')}" contenteditable="true" onclick="document.execCommand('selectAll',false,null)">${action.remainingUses}</span> 
                 <span>/ ${action.totalUses}</span>
             </div>
         </div>
         `;
     }
     resources.innerHTML = resourcesHTML;
+    resources.addEventListener('input', e => postHandler(e, queryActions));
 }
 
 const generateStatesHTML = stone => {
@@ -304,20 +312,13 @@ const generateStatesHTML = stone => {
         <div class="col bordered stat-card">
             <small class="ellipsis">${state.name}</small>
             <div>
-                <input type="checkbox" value="${state.name}" ${state.isActive ? ' checked' : ''}></input>
+                <input id="states_${state.name.replace(/ /g, '-')}" type="checkbox" ${state.isActive ? ' checked' : ''}></input>
             </div>
         </div>
         `;
     }
     states.innerHTML = statesHTML;
-
-    const statesToggles = states.querySelectorAll('input');
-    for (const toggle of statesToggles) {
-        toggle.addEventListener('change', () => {
-            stone.states.find(s => s.name === toggle.value).toggle();
-            generateSkillsHTML(), generateTopRowHTML(), generateBasicStatsHTML(), generateSituationalInfoHTML();
-        });
-    }
+    states.addEventListener('input', e => postHandler(e, loadAllContent));
 }
 
 const generateItemsHTML = (stone, arr) => {
@@ -430,9 +431,14 @@ const queryActions = stone => {
     );
 }
 
-const loadAllContent = async () => {
-    const stone = await getJSON('get');
-    console.log(stone);
+const resetFilterEventListeners = stone => {
+    inventoryFilter.removeEventListener('input', () => {queryInventory(stone)});
+    actionsFilter.removeEventListener('input', () => {queryActions(stone)});
+    inventoryFilter.addEventListener('input', () => {queryInventory(stone)});
+    actionsFilter.addEventListener('input', () => {queryActions(stone)});
+}
+
+const loadAllContent = stone => {
     generateTopLeftCornerHTML(stone);
     generateTopRowHTML(stone);
     generateSkillsHTML(stone);
@@ -443,12 +449,9 @@ const loadAllContent = async () => {
     generateStatesHTML(stone);
     queryInventory(stone);
     queryActions(stone);
-    inventoryFilter.addEventListener('input', () => {queryInventory(stone)});
-    actionsFilter.addEventListener('input', () => {queryActions(stone)});
-
-    document.querySelectorAll('[contenteditable="true"]').forEach(element => {
-        element.addEventListener('input', contentEditableHandler);
-    });
+    resetFilterEventListeners(stone);
 }
 
-loadAllContent();
+window.addEventListener('DOMContentLoaded', async () => {
+    loadAllContent(await getJSON('get'));
+});
