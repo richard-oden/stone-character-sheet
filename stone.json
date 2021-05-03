@@ -40,5 +40,15 @@
         "Hill Rune Invoked": false,
         "Storm Rune Invoked": false,
         "Augmented Size": false
+    },
+    "descriptionsExpanded": {
+        "Auto Stabilizer (Periapt of Wound Closure)": false,
+        "Dragonchess Set": false,
+        "advantage": false,
+        "resistances": false,
+        "immunities": false,
+        "Disengage": false,
+        "Augmented Strength (Giant's Might)": false,
+        "proficiencies": true
     }
 }

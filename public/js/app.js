@@ -32,8 +32,10 @@ const toggleDescHandler = event => {
         queryElement = queryElement.parentElement;
         attempts++;
     }
-    if (description)
+    if (description) {
         description.style.display = event.target.checked ? 'flex' : 'none';
+        postHandler(event);
+    }
 }
 
 let postTimeout = null;
@@ -209,10 +211,14 @@ const generateWealthHTML = stone => {
 }
 
 const generateSituationalInfoHTML = stone => {
+    const checkDescToggleState = keyword => {
+        return stone[keyword].some ? stone.descriptionsExpanded[keyword] ? 'checked' : '' : 'disabled';
+    }
+
     let situationalInfoHTML = '';
     situationalInfoHTML += 
     `<h3 class="advantage toggle-header">
-        <input type="checkbox" value="advantage-desc" class="toggle-desc small" ${stone.advantage.some ? 'checked' : 'disabled'}></input>
+        <input type="checkbox" value="advantage-desc" id="descriptionsExpanded_advantage" class="toggle-desc small" ${checkDescToggleState('advantage')}></input>
         Advantage
     </h3>
     <div class="border-bottom-l"><div class="col advantage-desc sit-wrap">`
@@ -222,7 +228,7 @@ const generateSituationalInfoHTML = stone => {
     situationalInfoHTML += 
     `</div></div>
     <h3 class="disadvantage toggle-header">
-        <input type="checkbox" value="disadvantage-desc" class="toggle-desc small" ${stone.disadvantage.some ? 'checked' : 'disabled'}></input>
+        <input type="checkbox" value="disadvantage-desc" id="descriptionsExpanded_disadvantage" class="toggle-desc small" ${checkDescToggleState('disadvantage')}></input>
         Disadvantage
     </h3>
     <div class="border-bottom-l"><div class="col disadvantage-desc sit-wrap">`
@@ -232,7 +238,7 @@ const generateSituationalInfoHTML = stone => {
     situationalInfoHTML += 
     `</div></div>
     <h3 class="toggle-header">
-        <input type="checkbox" value="resistances-desc" class="toggle-desc small" ${stone.resistances.some ? 'checked' : 'disabled'}></input>
+        <input type="checkbox" value="resistances-desc" id="descriptionsExpanded_resistances" class="toggle-desc small" ${checkDescToggleState('resistances')}></input>
         Resistances
     </h3>
     <div class="border-bottom-l"><div class="col resistances-desc sit-wrap">`
@@ -242,7 +248,7 @@ const generateSituationalInfoHTML = stone => {
     situationalInfoHTML += 
     `</div></div>
     <h3 class="toggle-header">
-        <input type="checkbox" value="immunities-desc" class="toggle-desc small" ${stone.immunities.some ? 'checked' : ' disabled'}></input>
+        <input type="checkbox" value="immunities-desc" id="descriptionsExpanded_immunities" class="toggle-desc small" ${checkDescToggleState('immunities')}></input>
         Immunities
     </h3>
     <div class="border-bottom-l"><div class="col immunities-desc sit-wrap">`
@@ -252,7 +258,7 @@ const generateSituationalInfoHTML = stone => {
     situationalInfoHTML += 
     `</div></div>
     <h3 class="toggle-header">
-        <input type="checkbox" value="miscellaneous-desc" class="toggle-desc small" ${stone.miscellaneous.some ? 'checked' : ' disabled'}></input>
+        <input type="checkbox" value="miscellaneous-desc" id="descriptionsExpanded_miscellaneous" class="toggle-desc small" ${checkDescToggleState('miscellaneous')}></input>
         Miscellaneous
     </h3>
     <div class="border-bottom-l"><div class="col miscellaneous-desc sit-wrap">`
@@ -262,7 +268,7 @@ const generateSituationalInfoHTML = stone => {
     situationalInfoHTML += 
     `</div></div>
     <h3 class="proficient toggle-header">
-        <input type="checkbox" value="proficiencies-desc" class="toggle-desc small" checked></input>
+        <input type="checkbox" value="proficiencies-desc" id="descriptionsExpanded_proficiencies" class="toggle-desc small"${stone.descriptionsExpanded.proficiencies ? 'checked' : ''}></input>
         Proficiencies
     </h3>
     <div class="border-bottom-l"><div class="col proficiencies-desc sit-wrap">`
@@ -275,6 +281,11 @@ const generateSituationalInfoHTML = stone => {
         }
     situationalInfoHTML += '</div></div>'
     situationalInfo.innerHTML = situationalInfoHTML;
+
+    for (const header of situationalInfo.querySelectorAll('.toggle-header')) {
+        const toggleInput = header.querySelector('.toggle-desc');
+        situationalInfo.querySelector(`.${toggleInput.value}`).style.display = toggleInput.checked ? 'flex' : 'none';
+    }
 
     situationalInfo.addEventListener('click', event => {
         if (event.target.classList.contains('toggle-desc')) {
@@ -322,6 +333,10 @@ const generateStatesHTML = stone => {
 }
 
 const generateItemsHTML = (stone, arr) => {
+    const checkDescToggleState = item => {
+        return item.description ? stone.descriptionsExpanded[item.name] ? 'checked' : '' : 'disabled';
+    }
+
     let inventoryHTML = '';
     for (const item of arr) {
         const attunementHTML = item.attunement ? 
@@ -334,7 +349,7 @@ const generateItemsHTML = (stone, arr) => {
         `
             <div class="item col bordered">
                 <div class="item-info toggle-header">
-                    <input type="checkbox" value="item-desc" class="toggle-desc small"${item.description ? '' : ' disabled'}></input>
+                    <input type="checkbox" value="item-desc" id="descriptionsExpanded_${item.name.replace(/ /g, '-')}" class="toggle-desc small"${checkDescToggleState(item)}></input>
                     <span class="name">${item.name}</span>
                     ${item.armorClass ? `<span class="small">AC: ${item.armorClass}</span>` : ''}
                     ${item.range ? `<span class="small">${item.range}ft</span>` : ''}
@@ -348,6 +363,9 @@ const generateItemsHTML = (stone, arr) => {
 
     const itemCards = document.querySelectorAll('.item');
     for (const itemCard of itemCards) {
+        const description = itemCard.querySelector('.description');
+        if (description) description.style.display = itemCard.querySelector('.toggle-desc').checked ? 'flex' : 'none';
+
         itemCard.addEventListener('click', event => {
             if (event.target.classList.contains('toggle-desc')) {
                 toggleDescHandler(event);
@@ -364,12 +382,16 @@ const generateItemsHTML = (stone, arr) => {
 }
 
 const generateActionsHTML = (stone, arr) => {
+    const checkDescToggleState = action => {
+        return action.description ? stone.descriptionsExpanded[action.name] ? 'checked' : '' : 'disabled';
+    }
+
     let actionsColLeftHTML = '';
     let actionsColRightHTML = '';
     const getHTML = (action) => {
         return `<div class="action col bordered${action.remainingUses != null && action.remainingUses <= 0 ? ' expended' : ''}">
                     <div class="toggle-header">
-                        <input type="checkbox" value="action-desc" class="toggle-desc small"${action.description ? '' : ' disabled'}></input>
+                        <input type="checkbox" value="action-desc" id="descriptionsExpanded_${action.name.replace(/ /g, '-')}" class="toggle-desc small"${checkDescToggleState(action)}></input>
                         <span class="name">${action.name}</span>
                         <span class="small">${shortenResourceName(action.type)}</span>
                         ${action.rolls ? `<span class="small">${action.rolls}</span>` : ''}
@@ -393,6 +415,9 @@ const generateActionsHTML = (stone, arr) => {
 
     const actionCards = document.querySelectorAll('.action');
     for (const actionCard of actionCards) {
+        const description = actionCard.querySelector('.description');
+        if (description) description.style.display = actionCard.querySelector('.toggle-desc').checked ? 'flex' : 'none';
+
         actionCard.addEventListener('click', event => {
             if (event.target.classList.contains('toggle-desc')) {
                 toggleDescHandler(event);
@@ -414,15 +439,15 @@ const applyFilter = (arr, filterElement) => {
     for (const toggle of checkedToggles) {
         tempArr.push(...arr.filter(i => i.type.includes(toggle.value)));
     }
-    return tempArr.sort(compareObjectsByName);
+    return tempArr;
 }
 
 const queryInventory = stone => {
-    generateItemsHTML(stone, applyFilter(stone.inventory, inventoryFilter));
+    generateItemsHTML(stone, applyFilter(stone.inventory, inventoryFilter).sort(compareObjectsByName));
 }
 
 const queryActions = stone => {
-    generateActionsHTML(stone, applyFilter(stone.actions, actionsFilter));
+    generateActionsHTML(stone, applyFilter(stone.actions, actionsFilter).sort(compareObjectsByName));
 }
 
 const resetFilterEventListeners = stone => {

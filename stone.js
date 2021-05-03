@@ -30,7 +30,7 @@ const createStoneObj = () => {
             savingThrows: ['STR', 'CON'],
             skills: ['Athletics', 'Insight', 'Investigation', 'Perception', 'Religion'],
             languages: ['Common', 'Gnomish', 'Giant', 'Primordial'],
-            tools: ['Cartographer\'s Tools', 'Dragonchess Set'],
+            tools: ['Cartographer\'s Tools', 'Dragonchess Set', 'Smith\'s Tools'],
             weapons: ['Simple', 'Martial'],
             armor: ['Light', 'Medium', 'Heavy', 'Shields']
         },
@@ -71,7 +71,8 @@ const createStoneObj = () => {
                 `You regain 8d4 + 8 hit points when you drink this potion. The potion's red liquid glimmers when agitated.`),
             new Item('Dragonchess Set',
                 `It's comprised of an assortment of various found items, such as pebbles, shells, bits of metal, and pottery shards. On one side, the pieces are enscribed with symbols of the dark six, and on the other, symbols of Oghma.`),
-            new Item('Commander Hale\'s Wand (expended)')
+            new Item('Commander Hale\'s Wand (expended)'),
+            new Item('Cartographer\'s Tools')
         ],
         wealth: base.wealth,
     
@@ -122,6 +123,8 @@ const createStoneObj = () => {
         deathSaves: base.deathSaves,
     
         attunedItemNames: base.attunedItemNames,
+
+        descriptionsExpanded: base.descriptionsExpanded,
     
         get inventory() {
             return [...this.weapons, ...this.armor, ...this.items];
