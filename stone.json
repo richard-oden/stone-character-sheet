@@ -18,11 +18,6 @@
         "failures": 0
     },
     "wealth": 5432,
-    "attunedItemNames": [
-        "Enchantment of Protection (Cloak of Protection)",
-        "Auto Stabilizer (Periapt of Wound Closure)",
-        "Ring of Mind Shielding"
-    ],
     "resources": {
         "Action Surge": 1,
         "Second Wind": 1,
@@ -49,6 +44,17 @@
         "immunities": false,
         "Disengage": false,
         "Augmented Strength (Giant's Might)": false,
-        "proficiencies": true
-    }
+        "proficiencies": false,
+        "Clockwork Amulet": false,
+        "miscellaneous": false,
+        "notes": false,
+        "Javelin of Lightning": false
+    },
+    "attunement": {
+        "Auto Stabilizer (Periapt of Wound Closure)": true,
+        "Enchantment of Protection (Cloak of Protection)": true,
+        "Ring of Mind Shielding": true
+    },
+    "notes": "",
+    "": "This is a test"
 }

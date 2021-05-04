@@ -122,9 +122,11 @@ const createStoneObj = () => {
     
         deathSaves: base.deathSaves,
     
-        attunedItemNames: base.attunedItemNames,
+        attunement: base.attunement,
 
         descriptionsExpanded: base.descriptionsExpanded,
+
+        notes: base.notes,
     
         get inventory() {
             return [...this.weapons, ...this.armor, ...this.items];

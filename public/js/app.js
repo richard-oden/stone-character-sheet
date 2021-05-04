@@ -279,7 +279,15 @@ const generateSituationalInfoHTML = stone => {
                 <span>${toCommaSeparatedList(stone.proficiencies[prof])}</span>
             </span>`;
         }
-    situationalInfoHTML += '</div></div>'
+    situationalInfoHTML += 
+        `</div></div>
+        <h3 class="toggle-header">
+            <input type="checkbox" value="notes-desc" id="descriptionsExpanded_notes" class="toggle-desc small" ${stone.descriptionsExpanded.notes ? 'checked' : ''}></input>
+            Notes
+        </h3>
+        <div class="border-bottom-l">
+            <p class="notes-desc sit-wrap bordered small" id="notes" contenteditable="true">${stone.notes}</p>
+        </div>`
     situationalInfo.innerHTML = situationalInfoHTML;
 
     for (const header of situationalInfo.querySelectorAll('.toggle-header')) {
@@ -292,6 +300,8 @@ const generateSituationalInfoHTML = stone => {
             toggleDescHandler(event);
         }
     });
+
+    document.querySelector('#notes').addEventListener('input', postHandler);
 }
 
 const generateResourcesHTML = stone => {
@@ -342,7 +352,7 @@ const generateItemsHTML = (stone, arr) => {
         const attunementHTML = item.attunement ? 
         `<span class="attuned row">
             <small>Attuned:&nbsp</small>
-            <input class="small toggle-attuned" type="checkbox" ${stone.attunedItemNames.includes(item.name) ? ' checked' : ''}></input>
+            <input class="small toggle-attuned" id="attunement_${item.name.replace(/ /g, '-')}" type="checkbox" ${stone.attunement[item.name] ? ' checked' : ''}></input>
         </span>` : '';
 
         inventoryHTML +=
@@ -370,12 +380,7 @@ const generateItemsHTML = (stone, arr) => {
             if (event.target.classList.contains('toggle-desc')) {
                 toggleDescHandler(event);
             } else if (event.target.classList.contains('toggle-attuned')) {
-                const name = itemCard.querySelector('.name').textContent;
-                if (event.target.checked && stone.attunedItemNames.includes(name)) {
-                    stone.attunedItemNames.push(name);
-                } else {
-                    stone.attunedItemNames = stone.attunedItemNames.filter(_ => _ !== name);
-                }
+                postHandler(event);
             }
         });
     }

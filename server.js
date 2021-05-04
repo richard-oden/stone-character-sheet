@@ -26,7 +26,7 @@ app.post('/save', async (req, res) => {
     updateObjProp(base, req.body.value, req.body.propPath);
     fs.writeFile('stone.json', JSON.stringify(base, null, 4), err => {
         if (err) throw err;
-        console.log('JSON saved!');
+        console.log('JSON saved: ' + JSON.stringify(req.body));
     });
     res.json({...createStoneObj()});
 });
