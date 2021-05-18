@@ -4,7 +4,7 @@ class Weapon extends Item {
     constructor(name, weaponType, properties, range, damage,
         enchantment = 0, description = "", requiresAttunement = false) {
         super(name, description, requiresAttunement),
-        this.type = weaponType,
+        this.weaponType = weaponType,
         this.properties = properties,
         this.range = range,
         this.damage = damage,
@@ -14,8 +14,7 @@ class Weapon extends Item {
             let mod = character.abilityScoreMods.STR;
             if (this.enchantment) mod += this.enchantment;
     
-            let attackMod = mod + extraAttackMod + 
-                (character.proficiencies.weapons.includes(this.type) ? character.proficiencyBonus : 0);
+            let attackMod = mod + extraAttackMod + (character.proficiencies.weapons.includes(this.weaponType) ? character.proficiencyBonus : 0);
             let damageMod = mod + extraDamageMod;
     
             let rollsString = `d20+${attackMod} / `;

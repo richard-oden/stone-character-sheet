@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/richard-oden/stone-character-sheet#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "rpg-awesome": "^0.2.0"
   }
 }

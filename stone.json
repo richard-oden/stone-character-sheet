@@ -1,7 +1,7 @@
 {
     "name": "Stone (PB-379)",
     "level": 12,
-    "currentHitPoints": 141,
+    "currentHitPoints": 65,
     "tempHitPoints": 0,
     "currentHitDice": 12,
     "inspiration": false,
@@ -17,44 +17,61 @@
         "successes": 0,
         "failures": 0
     },
-    "wealth": 5432,
+    "wealth": 2132,
     "resources": {
-        "Action Surge": 1,
+        "Action Surge": 0,
         "Second Wind": 1,
-        "Invoke Fire Rune": 1,
-        "Invoke Frost Rune": 1,
+        "Invoke Fire Rune": 0,
+        "Invoke Frost Rune": 0,
         "Invoke Hill Rune": 1,
         "Invoke Storm Rune": 1,
-        "Augment Size (Giant's Might)": 4,
-        "Runic Shield": 4,
+        "Augment Size (Giant's Might)": 3,
+        "Runic Shield": 3,
         "Indomitable": 1,
         "Clockwork Amulet": 1
     },
     "states": {
-        "Frost Rune Invoked": false,
-        "Hill Rune Invoked": false,
+        "Frost Rune Invoked": true,
+        "Hill Rune Invoked": true,
         "Storm Rune Invoked": false,
-        "Augmented Size": false
+        "Augmented Size": true
     },
     "descriptionsExpanded": {
         "Auto Stabilizer (Periapt of Wound Closure)": false,
         "Dragonchess Set": false,
-        "advantage": false,
-        "resistances": false,
+        "advantage": true,
+        "resistances": true,
         "immunities": false,
         "Disengage": false,
         "Augmented Strength (Giant's Might)": false,
-        "proficiencies": false,
+        "proficiencies": true,
         "Clockwork Amulet": false,
-        "miscellaneous": false,
-        "notes": false,
-        "Javelin of Lightning": false
+        "miscellaneous": true,
+        "notes": true,
+        "Javelin of Lightning": false,
+        "Crawl": false,
+        "Drop prone": false,
+        "Grapple": false,
+        "Invoke Fire Rune": true,
+        "Vind Rune Plate Armor": false,
+        "Winged Boots": false,
+        "Attack with Javelin of Lightning": false,
+        "Augment Size (Giant's Might)": false,
+        "Jump": false,
+        "Invoke Storm Rune": false,
+        "disadvantage": false,
+        "Dash": false,
+        "Invoke Frost Rune": false,
+        "Runic Shield": true,
+        "Invoke Hill Rune": true
     },
     "attunement": {
-        "Auto Stabilizer (Periapt of Wound Closure)": true,
+        "Auto Stabilizer (Periapt of Wound Closure)": false,
         "Enchantment of Protection (Cloak of Protection)": true,
-        "Ring of Mind Shielding": true
+        "Ring of Mind Shielding": false,
+        "Vind Rune Plate Armor": true,
+        "Winged Boots": true
     },
-    "notes": "",
+    "notes": "Best notes ever right here man",
     "": "This is a test"
 }

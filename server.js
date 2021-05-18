@@ -4,6 +4,7 @@ const createStoneObj = require('./stone');
 const app = express();
 
 app.use(express.static('public'));
+app.use('/rpg-awesome', express.static('node_modules/rpg-awesome/'))
 app.use(express.json());
 app.listen(process.env.PORT || 3000);
 

@@ -20,8 +20,8 @@ const createStoneObj = () => {
         tempHitPoints: base.tempHitPoints,
         hitDie: 'd10',
         currentHitDice: base.currentHitDice,
-        maxHitDice: 11,
-        speed: 30,
+        maxHitDice: base.level,
+        speed: 35,
         inspiration: base.inspiration,
     
         abilityScores: base.abilityScores,
@@ -42,8 +42,8 @@ const createStoneObj = () => {
         miscModifiers: {},
     
         weapons: [
-            new Weapon('Kanabo (Maul +1)', 'Martial', ['Heavy', 'Two-Handed'], 
-                range = '5', {bludgeoning: "2d6"}, enchantment = 1),
+            new Weapon('Kanabo (Maul +2)', 'Martial', ['Heavy', 'Two-Handed'], 
+                range = '5', {bludgeoning: "2d6"}, enchantment = 2),
             new Weapon('Javelin of Lightning', 'Simple', ['Range', 'Thrown'],
                 range = '30/120', {piercing: '1d6', lightning: '4d6'}, enchantment = 0,
                 description = `This Javelin is a Magic Weapon. When you hurl it and speak its Command Word, it transforms into a bolt of lightning, forming a line 5 feet wide that extends out from you to a target within 120 feet. Each creature in the line excluding you and the target must make a DC 13 Dexterity saving throw, taking 4d6 lightning damage on a failed save, and half as much damage on a successful one. The Lightning Bolt turns back into a Javelin when it reaches the target. Make a ranged weapon Attack against the target. On a hit, the target takes damage from the Javelin plus 4d6 lightning damage.
@@ -51,7 +51,9 @@ const createStoneObj = () => {
                 requiresAttunement = false),
             ],
         armor: [
-            new Armor('Plate Armor', 'Heavy', 18)
+            new Armor('Vind Rune Plate Armor', 'Heavy', 18, enchantment = 0, 
+                description = 'The armor is now an uncommon magic item that requires attunement. You gain a bonus to speed of 5 feet while you wear the armor, and if it normally imposes disadvantage on Stealth checks, it no longer does so.', 
+                requresAttunement = true)
         ],
         items: [
             new Item('Enchantment of Protection (Cloak of Protection)', 
@@ -72,7 +74,11 @@ const createStoneObj = () => {
             new Item('Dragonchess Set',
                 `It's comprised of an assortment of various found items, such as pebbles, shells, bits of metal, and pottery shards. On one side, the pieces are enscribed with symbols of the dark six, and on the other, symbols of Oghma.`),
             new Item('Commander Hale\'s Wand (expended)'),
-            new Item('Cartographer\'s Tools')
+            new Item('Cartographer\'s Tools'),
+            new Item('Winged Boots', 
+                `While you wear these boots, you have a flying speed equal to your walking speed. You can use the boots to fly for up to 4 hours, all at once or in several shorter flights, each one using a minimum of 1 minute from the duration. If you are flying when the duration expires, you descend at a rate of 30 feet per round until you land.
+The boots regain 2 hours of flying capability for every 12 hours they aren't in use.`, 
+                true),
         ],
         wealth: base.wealth,
     
@@ -84,7 +90,7 @@ const createStoneObj = () => {
         ],
     
         disadvantage: [
-            "Stealth Checks (while wearing Plate Armor)"
+            // "Stealth Checks (while wearing Plate Armor)"
         ],
     
         resistances: [
@@ -226,15 +232,11 @@ const createStoneObj = () => {
                     'You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.',
                     range = null, remainingUses = base.resources["Second Wind"], totalUses = 1),
                 
-                new Action('Interception', 'Reaction (Unique)', `1d10+${this.proficiencyBonus}`,
-                    'When a creature you can see hits a target, other than you, within 5 feet of you with an attack, you can use your reaction to reduce the damage the target takes by 1d10 + your proficiency bonus (to a minimum of 0 damage). You must be wielding a shield or a simple or martial weapon to use this reaction.',
-                    range = 5),
-                
                 new Action('Invoke Fire Rune', 'Free (Unique)', `Damage: 2d6 fire`,
                     `In addition, when you hit a creature with an attack using a weapon, you can invoke the rune to summon fiery shackles: the target takes an extra 2d6 fire damage, and it must succeed on a Strength (DC ${8 + this.proficiencyBonus + this.abilityScoreMods.CON}) saving throw or be restrained for 1 minute. While restrained by the shackles, the target takes 2d6 fire damage at the start of each of its turns. The target can repeat the saving throw at the end of each of its turns, banishing the shackles on a success. Once you invoke this rune, you can’t do so again until you finish a short or long rest.`,
                     range = null, remainingUses = base.resources["Invoke Fire Rune"], totalUses = this.level < 15 ? 1 : 2),
                 
-                new Action('Invoke Frost Rune', 'Reaction (Unique)', null,
+                new Action('Invoke Frost Rune', 'Bonus (Unique)', null,
                     `In addition, you can invoke the rune as a bonus action to increase your sturdiness. For 10 minutes, you gain a +2 bonus to all ability checks and saving throws that use Strength or Constitution. Once you invoke this rune, you can't do so again until you finish a short or long rest.`,
                     range = null, remainingUses = base.resources["Invoke Frost Rune"], totalUses = this.level < 15 ? 1 : 2),
                 
