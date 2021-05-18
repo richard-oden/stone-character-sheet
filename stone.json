@@ -62,7 +62,7 @@
         "disadvantage": false,
         "Dash": false,
         "Invoke Frost Rune": false,
-        "Runic Shield": true,
+        "Runic Shield": false,
         "Invoke Hill Rune": true
     },
     "attunement": {

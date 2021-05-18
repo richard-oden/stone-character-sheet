@@ -308,6 +308,10 @@ input[type="textarea"]:active, input[type="textarea"]:focus {
     position: relative;
 }
 
+.toggle-header span {
+    display: flex;
+}
+
 .filter > * {
     flex-grow: 1;
 }
@@ -391,4 +395,8 @@ input[type="textarea"]:active, input[type="textarea"]:focus {
     white-space: pre-wrap;
     overflow-wrap: break-word;
     word-wrap: break-word;
+}
+
+.ra {
+    font-size: 1rem;
 }

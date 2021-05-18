@@ -4,6 +4,7 @@ const Armor = require('./models/Armor');
 const Weapon = require('./models/Weapon');
 const Action = require('./models/Action');
 const State = require('./models/State');
+const iconDictionary = require('./icon-dictionary');
 
 const createStoneObj = () => {
     const base = require('./stone.json');
@@ -232,7 +233,7 @@ The boots regain 2 hours of flying capability for every 12 hours they aren't in 
                     'You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.',
                     range = null, remainingUses = base.resources["Second Wind"], totalUses = 1),
                 
-                new Action('Invoke Fire Rune', 'Free (Unique)', `Damage: 2d6 fire`,
+                new Action('Invoke Fire Rune', 'Free (Unique)', `Damage: 2d6 ${iconDictionary.fire}`,
                     `In addition, when you hit a creature with an attack using a weapon, you can invoke the rune to summon fiery shackles: the target takes an extra 2d6 fire damage, and it must succeed on a Strength (DC ${8 + this.proficiencyBonus + this.abilityScoreMods.CON}) saving throw or be restrained for 1 minute. While restrained by the shackles, the target takes 2d6 fire damage at the start of each of its turns. The target can repeat the saving throw at the end of each of its turns, banishing the shackles on a success. Once you invoke this rune, you can’t do so again until you finish a short or long rest.`,
                     range = null, remainingUses = base.resources["Invoke Fire Rune"], totalUses = this.level < 15 ? 1 : 2),
                 

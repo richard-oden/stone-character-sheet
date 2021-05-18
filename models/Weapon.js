@@ -1,4 +1,5 @@
 const Item = require('./Item');
+const iconDictionary = require('../icon-dictionary');
 
 class Weapon extends Item {
     constructor(name, weaponType, properties, range, damage,
@@ -21,7 +22,7 @@ class Weapon extends Item {
             for (const damageType of Object.keys(this.damage)) {
                 rollsString += this.damage[damageType];
                 if (Object.keys(this.damage)[0] == damageType) rollsString += (mod >= 0 ? '+' : '') + damageMod;
-                rollsString += ` ${damageType} `;
+                rollsString += ` ${iconDictionary[damageType]} `;
             }
             return rollsString;
         }
