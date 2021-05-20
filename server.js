@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs');
+const iconDictionary = require('./icon-dictionary');
 const createStoneObj = require('./stone');
 const app = express();
 
@@ -17,6 +18,10 @@ const updateObjProp = (obj, value, propPath) => {
         ? obj[head] = value
         : updateObjProp(obj[head], value, rest.join('_'));
 }
+
+app.get('/icon/:key', async(req, res) => {
+    res.send(iconDictionary[req.params.key]);
+});
 
 app.get('/get', async (req, res) => {
     res.json({...createStoneObj()});

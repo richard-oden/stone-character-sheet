@@ -59,14 +59,16 @@ const postHandler = async (event, onSuccess) => {
     }, 1000);
 }
 
-// Handles all JSON ajax requests:
-const getJSON = async url => {
+const get = async url => {
     try {
-      const response = await fetch(url);
-      return await response.json();
+        return await fetch(url);
     } catch (error) {
-      throw error;
+        throw error;
     }
+}
+
+const getJSON = async url => {
+    return (await get(url)).json();
 }
 
 const getClasses = (stone, queryItem, queryType = '', profArr = []) => {
@@ -386,19 +388,21 @@ const generateItemsHTML = (stone, arr) => {
     }
 }
 
-const generateActionsHTML = (stone, arr) => {
+const generateActionsHTML = async (stone, arr) => {
     const checkDescToggleState = action => {
         return action.description ? stone.descriptionsExpanded[action.name] ? 'checked' : '' : 'disabled';
     }
 
     let actionsColLeftHTML = '';
     let actionsColRightHTML = '';
-    const getHTML = (action) => {
+    const getHTML = async action => {
+        const actionTypeIcon = await (await get('icon/' + shortenResourceName(action.type).toLowerCase())).text();
+        console.log(actionTypeIcon);
         return `<div class="action col bordered${action.remainingUses != null && action.remainingUses <= 0 ? ' expended' : ''}">
                     <div class="toggle-header">
                         <input type="checkbox" value="action-desc" id="descriptionsExpanded_${action.name.replace(/ /g, '-')}" class="toggle-desc small"${checkDescToggleState(action)}></input>
                         <span class="name">${action.name}</span>
-                        <span class="small">${shortenResourceName(action.type)}</span>
+                        <span class="small">${actionTypeIcon}</span>
                         ${action.rolls ? `<span class="small">${action.rolls}</span>` : ''}
                         ${action.range ? `<span class="small">${action.range}ft</span>` : ''}
                         ${action.totalUses ? `<span class="small">${action.remainingUses} / ${action.totalUses}</span>` : ''}
@@ -409,9 +413,9 @@ const generateActionsHTML = (stone, arr) => {
 
     for (let i = 0; i < arr.length; i++) {
         if (i % 2 === 0) {
-            actionsColLeftHTML += getHTML(arr[i]);
+            actionsColLeftHTML += await getHTML(arr[i]);
         } else {
-            actionsColRightHTML += getHTML(arr[i]);
+            actionsColRightHTML += await getHTML(arr[i]);
         }
     }
 

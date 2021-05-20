@@ -13,7 +13,12 @@ const iconDictionary = {
     radiant: '&nbsp<i class="ra ra-sunbeams" title="radiant"></i>&nbsp',
     slashing: '&nbsp<i class="ra ra-spinning-sword" title="slashing"></i>&nbsp',
     thunder: '&nbsp<i class="ra ra-lightning-storm" title="thunder"></i>&nbsp',
-    weapon: '&nbsp<i class="ra ra-crossed-swords" title="weapon"></i>&nbsp'
+    weapon: '&nbsp<i class="ra ra-crossed-swords" title="weapon"></i>&nbsp',
+    action: '<i class="action-type-icon" title="Action">A</i>',
+    move: '<i class="action-type-icon" title="Move">M</i>',
+    free: '<i class="action-type-icon" title="Free">F</i>',
+    bonus: '<i class="action-type-icon" title="Bonus">B</i>',
+    reaction: '<i class="action-type-icon"  title="Reaction">R</i>'
 }
 
 module.exports = iconDictionary;
